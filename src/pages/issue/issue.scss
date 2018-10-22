@@ -1,0 +1,13 @@
+.pt-cell {
+    font-size: 28px;
+    display: flex;
+    padding: 20px 0;
+    margin: 0 30px;
+    border-bottom: 1px solid #ccc;
+    align-items: baseline;
+    .cell-input{
+        width: 100%;
+        flex: 1;
+        padding-right: 10px;
+    }
+}
