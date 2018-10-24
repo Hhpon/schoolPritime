@@ -7,6 +7,7 @@ class App extends Component {
 
   config = {
     pages: [
+      'pages/abc/abc',
       'pages/index/index',
       'pages/issue/issue'
     ],
