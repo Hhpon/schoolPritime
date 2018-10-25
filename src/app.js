@@ -7,9 +7,10 @@ class App extends Component {
 
   config = {
     pages: [
-      'pages/abc/abc',
       'pages/index/index',
-      'pages/issue/issue'
+      'pages/issue/issue',
+      'pages/mine/mine',
+      'pages/abc/abc'
     ],
     window: {
       backgroundTextStyle: 'light',
@@ -35,10 +36,10 @@ class App extends Component {
           selectedIconPath: './pages/asset/tabBar/part-timed.png'
         },
         {
-          pagePath: 'pages/index/index',
-          text: '兼职',
-          iconPath: './pages/asset/tabBar/issue.png',
-          selectedIconPath: './pages/asset/tabBar/issued.png'
+          pagePath: 'pages/mine/mine',
+          text: '我的',
+          iconPath: './pages/asset/tabBar/mine.png',
+          selectedIconPath: './pages/asset/tabBar/mined.png'
         }
       ]
     }

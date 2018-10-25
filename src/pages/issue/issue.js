@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Checkbox } from '@tarojs/components'
-import { AtNoticebar } from 'taro-ui'
+import { View, Picker, Button } from '@tarojs/components'
+import { AtNoticebar, AtInput, AtForm, AtRadio, AtCheckbox } from 'taro-ui'
 import { ptCell } from '../ptCell/ptCell'
 import { pickerCon } from '../pickerCon/pickerCon'
 import './issue.scss'
@@ -15,29 +15,64 @@ export default class issue extends Component {
         super();
         this.state = {
             dateSel: '',
-            CheckboxList: [
+            checkboxOption: [
                 {
                     value: '第一节',
-                    text: '第一节',
+                    label: '第一节',
                 },
                 {
                     value: '第二节',
-                    text: '第二节',
+                    label: '第二节',
                 },
                 {
                     value: '第三节',
-                    text: '第三节',
+                    label: '第三节',
                 },
                 {
                     value: '第四节',
-                    text: '第四节',
+                    label: '第四节',
                 },
                 {
                     value: '晚自习',
-                    text: '晚自习',
+                    label: '晚自习',
                 },
-            ]
+            ],
+            personInfomation: {
+                name: '',
+                telNum: '',
+                sex: '',
+                partimeDate: '',
+                wechatNum: '',
+                checkedList: []
+            }
         }
+    }
+
+
+
+    onDateChange = e => {
+        let personInfomation = this.state.personInfomation;
+        personInfomation.partimeDate = e.detail.value;
+        this.setState({
+            personInfomation: personInfomation
+        })
+    }
+
+    onSexChange = e => {
+        let personInfomation = this.state.personInfomation;
+        personInfomation.sex = e;
+        this.setState({
+            personInfomation: personInfomation
+        })
+    }
+
+    onCheckChange = e => {
+        console.log(e);
+        let personInfomation = this.state.personInfomation;
+        personInfomation.checkedList = e;
+        this.setState({
+            personInfomation: personInfomation
+        })
     }
 
     render() {
@@ -46,19 +81,48 @@ export default class issue extends Component {
                 <AtNoticebar icon='volume-plus'>
                     请认真填写，兼职时间提交之后不能修改！
                 </AtNoticebar>
-                <ptCell title='真实姓名：' placeholder='必填项'></ptCell>
-                <ptCell title='手机号码：' placeholder='必填项'></ptCell>
-                <ptCell title='性别：' placeholder='必填项'></ptCell>
-                <pickerCon></pickerCon>
-                <View className='checkList-container'>
-                    {this.state.CheckboxList.map((item, i) => {
-                        return (
-                            <Label className='checkbox-list__label' for={i} key={i}>
-                                <Checkbox className='checkbox-list__checkbox' value={item.value}>{item.text}</Checkbox>
-                            </Label>
-                        )
-                    })}
-                </View>
+                <AtForm reportSubmit>
+                    <Picker mode='date' onChange={this.onDateChange}>
+                        <View className='picker'>
+                            兼职日期：{this.state.personInfomation.partimeDate}
+                        </View>
+                    </Picker>
+                    <AtInput
+                        name='value1'
+                        title='真实姓名'
+                        type='text'
+                        placeholder='必填项'
+                        value={this.state.personInfomation.name}
+                    />
+                    <AtInput
+                        name='value1'
+                        title='电话号码'
+                        type='number'
+                        placeholder='必填项'
+                        value={this.state.personInfomation.telNum}
+                    />
+                    <AtInput
+                        name='value1'
+                        title='微信号'
+                        type='text'
+                        placeholder='必填项'
+                        value={this.state.personInfomation.wechatNum}
+                    />
+                    <AtRadio
+                        options={[
+                            { label: '男', value: '男', },
+                            { label: '女', value: '女' },
+                        ]}
+                        value={this.state.personInfomation.sex}
+                        onClick={this.onSexChange}
+                    />
+                    <AtCheckbox
+                        options={this.state.checkboxOption}
+                        selectedList={this.state.personInfomation.checkedList}
+                        onChange={this.onCheckChange.bind(this)}
+                    />
+                    <Button form-type='submit'>提交</Button>
+                </AtForm>
             </View>
         )
     }
