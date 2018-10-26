@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
-import { AtModal, AtModalHeader, AtModalContent, AtModalAction } from "taro-ui"
+import { AtTabs, AtTabsPane } from "taro-ui"
 import './index.scss'
 
 export default class Index extends Component {
@@ -12,11 +12,26 @@ export default class Index extends Component {
   constructor() {
     super();
     this.state = {
-      isScopeOpen: false
+      isScopeOpen: false,
+      current: 0,
+      priTime: []
     }
   }
 
   componentWillMount() {
+    this.getUserSetting();
+    this.getPritime(0);
+  }
+
+  componentDidMount() { }
+
+  componentWillUnmount() { }
+
+  componentDidShow() { }
+
+  componentDidHide() { }
+
+  getUserSetting() {
     const that = this;
     Taro.getSetting({
       success(res) {
@@ -54,15 +69,6 @@ export default class Index extends Component {
     })
   }
 
-  componentDidMount() { }
-
-  componentWillUnmount() { }
-
-  componentDidShow() { }
-
-  componentDidHide() { }
-
-
   getUserinfomation(e) {
     const userInfo = e.detail.userInfo;
     console.log(userInfo);
@@ -94,7 +100,29 @@ export default class Index extends Component {
     }
   }
 
+  getPritime(current) {
+    Taro.request({
+      url: 'http://localhost:3000/getPritime',
+      data: { current: current }
+    }).then(res => {
+      console.log(res);
+      this.setState({
+        priTime: res.data
+      })
+    })
+  }
+
+  ontabChange(e) {
+    this.setState({
+      current: e
+    })
+    this.getPritime(e);
+  }
+
   render() {
+
+    
+
     return (
       <View className='index'>
         {
@@ -110,6 +138,33 @@ export default class Index extends Component {
             </View>
           </View>
         }
+        <AtTabs
+          current={this.state.current}
+          scroll
+          tabList={[
+            { title: '第一节' },
+            { title: '第二节' },
+            { title: '第三节' },
+            { title: '第四节' },
+            { title: '晚自习' },
+          ]}
+          onClick={this.ontabChange.bind(this)}>
+          <AtTabsPane current={this.state.current} index={0}>
+            <View style='font-size:18px;text-align:center;height:100px;'>标签页一的内容</View>
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={1}>
+            <View style='font-size:18px;text-align:center;height:100px;'>标签页二的内容</View>
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={2}>
+            <View style='font-size:18px;text-align:center;height:100px;'>标签页三的内容</View>
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={3}>
+            <View style='font-size:18px;text-align:center;height:100px;'>标签页四的内容</View>
+          </AtTabsPane>
+          <AtTabsPane current={this.state.current} index={4}>
+            <View style='font-size:18px;text-align:center;height:100px;'>标签页五的内容</View>
+          </AtTabsPane>
+        </AtTabs>
       </View>
     )
   }

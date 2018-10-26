@@ -1,5 +1,5 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Picker, Button } from '@tarojs/components'
+import { View, Picker, Button, Form } from '@tarojs/components'
 import { AtNoticebar, AtInput, AtForm, AtRadio, AtCheckbox } from 'taro-ui'
 import { ptCell } from '../ptCell/ptCell'
 import { pickerCon } from '../pickerCon/pickerCon'
@@ -43,12 +43,49 @@ export default class issue extends Component {
                 sex: '',
                 partimeDate: '',
                 wechatNum: '',
+                price: '',
                 checkedList: []
             }
         }
     }
 
+    componentWillMount() {
+        this.onChangetime();
+        this.getUserRecord();
+    }
 
+    getUserRecord() {
+        const openId = Taro.getStorageSync('openid');
+        Taro.request({
+            url: 'http://localhost:3000/getUserRecord',
+            data: {
+                openId: openId
+            }
+        }).then(res => {
+            let result = res.data;
+            let personInfomation = this.state.personInfomation;
+            personInfomation.name = result.name;
+            personInfomation.telNum = result.telNum;
+            personInfomation.wechatNum = result.wechatNum;
+            personInfomation.sex = result.sex;
+            personInfomation.price = result.price;
+
+            this.setState({
+                personInfomation: personInfomation
+            })
+        })
+    }
+
+    onChangetime() {
+        let year = new Date().getFullYear();
+        let month = new Date().getMonth() + 1;
+        let day = new Date().getDate();
+        let personInfomation = this.state.personInfomation;
+        personInfomation.partimeDate = year + '-' + month + '-' + day;
+        this.setState({
+            personInfomation: personInfomation
+        })
+    }
 
     onDateChange = e => {
         let personInfomation = this.state.personInfomation;
@@ -75,13 +112,111 @@ export default class issue extends Component {
         })
     }
 
+
+    onNameChange(e) {
+        let personInfomation = this.state.personInfomation;
+        personInfomation.name = e;
+        this.setState({
+            personInfomation: personInfomation
+        })
+    }
+
+    onPriceChange(e) {
+        let personInfomation = this.state.personInfomation;
+        personInfomation.price = e;
+        this.setState({
+            personInfomation: personInfomation
+        })
+    }
+
+    onTelChange(e) {
+        console.log(e);
+        let personInfomation = this.state.personInfomation;
+        personInfomation.telNum = e;
+        this.setState({
+            personInfomation: personInfomation
+        })
+    }
+
+    onwechatNumChange(e) {
+        console.log(e);
+        let personInfomation = this.state.personInfomation;
+        personInfomation.wechatNum = e;
+        this.setState({
+            personInfomation: personInfomation
+        })
+    }
+
+
+    // 点击提交按钮后上传表单内容
+    submitHandle(e) {
+        console.log(this.state.personInfomation);
+        let personInfomation = this.state.personInfomation;
+        const openId = Taro.getStorageSync('openid');
+
+        for (let item in personInfomation) {
+            console.log(personInfomation[item]);
+            if (!personInfomation[item]) {
+                wx.showModal({
+                    title: '提示',
+                    content: '请填写完整再提交',
+                    showCancel: false,
+                    success(res) {
+                        if (res.confirm) {
+                            console.log('用户点击确定')
+                        } else if (res.cancel) {
+                            console.log('用户点击取消')
+                        }
+                    }
+                })
+                return;
+            }
+        }
+
+        Taro.request({
+            url: 'http://localhost:3000/issuePritime',
+            method: 'POST',
+            data: {
+                personInfomation: this.state.personInfomation,
+                openId: openId
+            }
+        }).then(res => {
+            if (res.data === 'no') {
+                wx.showModal({
+                    title: '提示',
+                    content: '请填写完整再提交',
+                    showCancel: false,
+                    success(res) {
+                        if (res.confirm) {
+                            console.log('用户点击确定')
+                        } else if (res.cancel) {
+                            console.log('用户点击取消')
+                        }
+                    }
+                })
+            } else {
+                Taro.showToast({
+                    title: '发布成功！',
+                    icon: 'success',
+                    duration: 2000
+                }).then(res => {
+                    setTimeout(() => {
+                        Taro.switchTab({
+                            url: '/pages/index/index'
+                        })
+                    }, 2000);
+                })
+            }
+        })
+    }
+
     render() {
         return (
             <View>
                 <AtNoticebar icon='volume-plus'>
                     请认真填写，兼职时间提交之后不能修改！
                 </AtNoticebar>
-                <AtForm reportSubmit>
+                <Form onSubmit={this.submitHandle}>
                     <Picker mode='date' onChange={this.onDateChange}>
                         <View className='picker'>
                             兼职日期：{this.state.personInfomation.partimeDate}
@@ -93,6 +228,15 @@ export default class issue extends Component {
                         type='text'
                         placeholder='必填项'
                         value={this.state.personInfomation.name}
+                        onChange={this.onNameChange.bind(this)}
+                    />
+                    <AtInput
+                        name='value1'
+                        title='替课价格'
+                        type='text'
+                        placeholder='必填项'
+                        value={this.state.personInfomation.price}
+                        onChange={this.onPriceChange.bind(this)}
                     />
                     <AtInput
                         name='value1'
@@ -100,6 +244,7 @@ export default class issue extends Component {
                         type='number'
                         placeholder='必填项'
                         value={this.state.personInfomation.telNum}
+                        onChange={this.onTelChange.bind(this)}
                     />
                     <AtInput
                         name='value1'
@@ -107,6 +252,7 @@ export default class issue extends Component {
                         type='text'
                         placeholder='必填项'
                         value={this.state.personInfomation.wechatNum}
+                        onChange={this.onwechatNumChange.bind(this)}
                     />
                     <AtRadio
                         options={[
@@ -122,7 +268,7 @@ export default class issue extends Component {
                         onChange={this.onCheckChange.bind(this)}
                     />
                     <Button form-type='submit'>提交</Button>
-                </AtForm>
+                </Form>
             </View>
         )
     }
