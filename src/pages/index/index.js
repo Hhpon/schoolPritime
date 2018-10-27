@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Button } from '@tarojs/components'
-import { AtTabs, AtTabsPane } from "taro-ui"
+import { View, Text, Button, Picker } from '@tarojs/components'
+import { AtTabBar } from "taro-ui"
 import './index.scss'
 
 export default class Index extends Component {
@@ -14,22 +14,39 @@ export default class Index extends Component {
     this.state = {
       isScopeOpen: false,
       current: 0,
-      priTime: []
+      priTime: [],
+      todayDate: '',
+      showDate: ''
     }
   }
 
   componentWillMount() {
-    this.getUserSetting();
-    this.getPritime(0);
   }
 
   componentDidMount() { }
 
   componentWillUnmount() { }
 
-  componentDidShow() { }
+  componentDidShow() {
+    this.getUserSetting();
+    let todayDate = this.onInitializetime();
+    this.getPritime(0, todayDate);
+  }
 
   componentDidHide() { }
+
+  onInitializetime() {
+    let year = new Date().getFullYear();
+    let month = new Date().getMonth() + 1;
+    let day = new Date().getDate();
+    let todayDate = year + '-' + month + '-' + day;
+    let showDate = month + '-' + day;
+    this.setState({
+      todayDate: todayDate,
+      showDate: showDate
+    })
+    return todayDate;
+  }
 
   getUserSetting() {
     const that = this;
@@ -42,25 +59,20 @@ export default class Index extends Component {
         } else {
           Taro.getUserInfo({
             success(res) {
-              try {
-                let userInfo = JSON.parse(res.rawData)
-                let openid = wx.getStorageSync('openid')
-                if (openid) {
-                  // Do something with return value
-                  Taro.request({
-                    url: 'http://localhost:3000/updateUserinfo',
-                    method: 'POST',
-                    data: {
-                      openid: openid,
-                      userInfo: userInfo
-                    }
-                  }).then(res => {
-                    console.log(res);
-                  })
-                }
-              } catch (e) {
-                // Do something when catch error
-
+              let userInfo = JSON.parse(res.rawData)
+              let openid = wx.getStorageSync('openid')
+              if (openid) {
+                // Do something with return value
+                Taro.request({
+                  url: 'http://localhost:3000/updateUserinfo',
+                  method: 'POST',
+                  data: {
+                    openid: openid,
+                    userInfo: userInfo
+                  }
+                }).then(res => {
+                  console.log(res);
+                })
               }
             }
           })
@@ -100,29 +112,50 @@ export default class Index extends Component {
     }
   }
 
-  getPritime(current) {
+  getPritime(current, todayDate) {
+
     Taro.request({
       url: 'http://localhost:3000/getPritime',
-      data: { current: current }
+      method: 'POST',
+      data: { current: current, todayDate: todayDate }
+
     }).then(res => {
-      console.log(res);
+
+      let result = res.data.length;
+
+      if (!result) {
+        return;
+      }
+
       this.setState({
         priTime: res.data
       })
+
     })
   }
 
   ontabChange(e) {
+
     this.setState({
       current: e
     })
-    this.getPritime(e);
+    let todayDate = this.state.todayDate;
+    this.getPritime(e, todayDate);
+
+  }
+
+  onDateChange = e => {
+
+    let showDate = e.detail.value.slice(5);
+    this.setState({
+      todayDate: e.detail.value,
+      showDate: showDate
+    })
+    this.getPritime(0, e.detail.value);
+
   }
 
   render() {
-
-    
-
     return (
       <View className='index'>
         {
@@ -138,33 +171,27 @@ export default class Index extends Component {
             </View>
           </View>
         }
-        <AtTabs
-          current={this.state.current}
-          scroll
+        <AtTabBar
           tabList={[
             { title: '第一节' },
             { title: '第二节' },
             { title: '第三节' },
             { title: '第四节' },
-            { title: '晚自习' },
+            { title: '晚自习' }
           ]}
-          onClick={this.ontabChange.bind(this)}>
-          <AtTabsPane current={this.state.current} index={0}>
-            <View style='font-size:18px;text-align:center;height:100px;'>标签页一的内容</View>
-          </AtTabsPane>
-          <AtTabsPane current={this.state.current} index={1}>
-            <View style='font-size:18px;text-align:center;height:100px;'>标签页二的内容</View>
-          </AtTabsPane>
-          <AtTabsPane current={this.state.current} index={2}>
-            <View style='font-size:18px;text-align:center;height:100px;'>标签页三的内容</View>
-          </AtTabsPane>
-          <AtTabsPane current={this.state.current} index={3}>
-            <View style='font-size:18px;text-align:center;height:100px;'>标签页四的内容</View>
-          </AtTabsPane>
-          <AtTabsPane current={this.state.current} index={4}>
-            <View style='font-size:18px;text-align:center;height:100px;'>标签页五的内容</View>
-          </AtTabsPane>
-        </AtTabs>
+          onClick={this.ontabChange}
+          current={this.state.current}
+        />
+
+          <View>
+            
+          </View>
+
+        <Picker mode='date' start={this.state.todayDate} onChange={this.onDateChange}>
+          <View className='picker-container'>
+            {this.state.showDate}
+          </View>
+        </Picker>
       </View>
     )
   }

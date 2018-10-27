@@ -6,7 +6,8 @@ import './mine.scss'
 
 export default class mine extends Component {
     config = {
-        navigationBarBackgroundColor: '#5FC768'
+        navigationBarBackgroundColor: '#6190E8',
+        navigationBarTitleText: '我的'
     }
 
     constructor() {
@@ -17,6 +18,10 @@ export default class mine extends Component {
     }
 
     componentWillMount() {
+        this.getUserinfo();
+    }
+
+    getUserinfo() {
         const openId = Taro.getStorageSync('openid');
         console.log(openId);
         Taro.request({
@@ -45,7 +50,31 @@ export default class mine extends Component {
                         </View>
                         <View className='name-con'>{this.state.userInfo.nickName}</View>
                     </View>
+                    <View className='mine-order'>
+                        <View className='order-top'>
+                            <Text>我的记录</Text>
+                            <View className='ordertop-right'>
+                                <AtIcon value='chevron-right' size='15' color='#868281'></AtIcon>
+                            </View>
+                        </View>
+                        <View className='order-bottom'>
+                            <View className='order-icon' onClick={this.onStarting}>
+                                <AtIcon prefixClass='icon' value='daifukuan' color='#6190E8' size='24'></AtIcon>
+                                <Text>待开始</Text>
+                            </View>
+                            <View className='order-icon' onClick={this.onGoing}>
+                                <AtIcon prefixClass='icon' value='daifahuo' color='#6190E8' size='24'></AtIcon>
+                                <Text>进行中</Text>
+                            </View>
+                            <View className='order-icon' onClick={this.onCompleting}>
+                                <AtIcon prefixClass='icon' value='yishouhuo' color='#6190E8' size='24'></AtIcon>
+                                <Text>已完成</Text>
+                            </View>
+                        </View>
+                    </View>
                 </View>
+                <View></View>
+                <View></View>
             </View>
         )
     }

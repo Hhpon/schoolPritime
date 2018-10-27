@@ -42,3 +42,19 @@
         }
     }
 }
+
+.picker-container {
+    width: 150px;
+    height: 70px;
+    line-height: 60px;
+    text-align: center;
+    background-color: #6190E8;
+    color: #FFF;
+    border-radius: 60px;
+    font-size: 28px;
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    margin-left: -75px;
+    z-index: 100;
+}

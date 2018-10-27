@@ -50,6 +50,9 @@ export default class issue extends Component {
     }
 
     componentWillMount() {
+    }
+
+    componentDidShow() {
         this.onChangetime();
         this.getUserRecord();
     }
@@ -63,13 +66,17 @@ export default class issue extends Component {
             }
         }).then(res => {
             let result = res.data;
+            if(result === '无用户记录'){
+                console.log(result);
+                return;
+            }
             let personInfomation = this.state.personInfomation;
             personInfomation.name = result.name;
             personInfomation.telNum = result.telNum;
             personInfomation.wechatNum = result.wechatNum;
             personInfomation.sex = result.sex;
             personInfomation.price = result.price;
-
+            personInfomation.checkedList = [];
             this.setState({
                 personInfomation: personInfomation
             })
@@ -155,7 +162,6 @@ export default class issue extends Component {
         const openId = Taro.getStorageSync('openid');
 
         for (let item in personInfomation) {
-            console.log(personInfomation[item]);
             if (!personInfomation[item]) {
                 wx.showModal({
                     title: '提示',
@@ -204,7 +210,11 @@ export default class issue extends Component {
                         Taro.switchTab({
                             url: '/pages/index/index'
                         })
-                    }, 2000);
+                    }, 1000);
+                    console.log(personInfomation);
+                    // that.setState({
+                    //     personInfomation: 
+                    // })
                 })
             }
         })
@@ -217,7 +227,7 @@ export default class issue extends Component {
                     请认真填写，兼职时间提交之后不能修改！
                 </AtNoticebar>
                 <Form onSubmit={this.submitHandle}>
-                    <Picker mode='date' onChange={this.onDateChange}>
+                    <Picker mode='date' start={this.state.personInfomation.partimeDate} onChange={this.onDateChange}>
                         <View className='picker'>
                             兼职日期：{this.state.personInfomation.partimeDate}
                         </View>

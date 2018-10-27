@@ -1,0 +1,53 @@
+@font-face {
+    font-family: "iconfont";
+    src: url('./pages/asset/icon/iconfont.eot?t=1538496693260');
+    /* IE9*/
+    src: url('./pages/asset/icon/iconfont.eot?t=1538496693260#iefix') format('embedded-opentype'), /* IE6-IE8 */
+    url('./pages/asset/icon/iconfont.ttf?t=1538496693260') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+    url('./pages/asset/icon/iconfont.svg?t=1538496693260#iconfont') format('svg');
+    /* iOS 4.1- */
+}
+
+.icon {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-gouwuche:before {
+    content: "\e649";
+}
+
+.icon-zhuye-copy:before {
+    content: "\e628";
+}
+
+.icon-hongjiuchengicongouwuche:before {
+    content: "\e60a";
+}
+
+.icon-success:before {
+    content: "\e7c6";
+}
+
+.icon-daishouhuo:before {
+    content: "\e64e";
+}
+
+.icon-daifahuo:before {
+    content: "\e61e";
+}
+
+.icon-fenxiang:before {
+    content: "\e646";
+}
+
+.icon-yishouhuo:before {
+    content: "\e611";
+}
+
+.icon-daifukuan:before {
+    content: "\e68b";
+}

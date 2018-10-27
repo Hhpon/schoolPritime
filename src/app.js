@@ -2,6 +2,7 @@ import Taro, { Component } from '@tarojs/taro'
 import Index from './pages/index'
 
 import './app.scss'
+import './icon.scss'
 
 class App extends Component {
 
@@ -20,7 +21,7 @@ class App extends Component {
     },
     tabBar: {
       color: '#8a8a8a',
-      selectedColor: '#39B54A',
+      selectedColor: '#6190E8',
       backgroundColor: '#FFF',
       list: [
         {
