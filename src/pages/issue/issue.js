@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Picker, Button, Form } from '@tarojs/components'
-import { AtNoticebar, AtInput, AtForm, AtRadio, AtCheckbox } from 'taro-ui'
+import { AtNoticebar, AtInput, AtForm, AtRadio, AtCheckbox, AtTextarea } from 'taro-ui'
 import { ptCell } from '../ptCell/ptCell'
 import { pickerCon } from '../pickerCon/pickerCon'
 import './issue.scss'
@@ -44,6 +44,7 @@ export default class issue extends Component {
                 partimeDate: '',
                 wechatNum: '',
                 price: '',
+                note: '',
                 checkedList: []
             }
         }
@@ -66,7 +67,7 @@ export default class issue extends Component {
             }
         }).then(res => {
             let result = res.data;
-            if(result === '无用户记录'){
+            if (result === '无用户记录') {
                 console.log(result);
                 return;
             }
@@ -154,28 +155,34 @@ export default class issue extends Component {
         })
     }
 
+    onNoteChange(e) {
+        console.log(e);
+    }
 
     // 点击提交按钮后上传表单内容
     submitHandle(e) {
-        console.log(this.state.personInfomation);
+        console.log(e.detail);
         let personInfomation = this.state.personInfomation;
         const openId = Taro.getStorageSync('openid');
 
         for (let item in personInfomation) {
-            if (!personInfomation[item]) {
-                wx.showModal({
-                    title: '提示',
-                    content: '请填写完整再提交',
-                    showCancel: false,
-                    success(res) {
-                        if (res.confirm) {
-                            console.log('用户点击确定')
-                        } else if (res.cancel) {
-                            console.log('用户点击取消')
+            if (item !== 'note') {
+                let length = personInfomation[item].length;
+                if (!length) {
+                    wx.showModal({
+                        title: '提示',
+                        content: '请填写完整再提交',
+                        showCancel: false,
+                        success(res) {
+                            if (res.confirm) {
+                                console.log('用户点击确定')
+                            } else if (res.cancel) {
+                                console.log('用户点击取消')
+                            }
                         }
-                    }
-                })
-                return;
+                    })
+                    return;
+                }
             }
         }
 
@@ -211,10 +218,6 @@ export default class issue extends Component {
                             url: '/pages/index/index'
                         })
                     }, 1000);
-                    console.log(personInfomation);
-                    // that.setState({
-                    //     personInfomation: 
-                    // })
                 })
             }
         })
@@ -226,12 +229,7 @@ export default class issue extends Component {
                 <AtNoticebar icon='volume-plus'>
                     请认真填写，兼职时间提交之后不能修改！
                 </AtNoticebar>
-                <Form onSubmit={this.submitHandle}>
-                    <Picker mode='date' start={this.state.personInfomation.partimeDate} onChange={this.onDateChange}>
-                        <View className='picker'>
-                            兼职日期：{this.state.personInfomation.partimeDate}
-                        </View>
-                    </Picker>
+                <Form onSubmit={this.submitHandle} reportSubmit>
                     <AtInput
                         name='value1'
                         title='真实姓名'
@@ -264,6 +262,11 @@ export default class issue extends Component {
                         value={this.state.personInfomation.wechatNum}
                         onChange={this.onwechatNumChange.bind(this)}
                     />
+                    <Picker mode='date' start={this.state.personInfomation.partimeDate} onChange={this.onDateChange}>
+                        <View className='picker'>
+                            兼职日期：{this.state.personInfomation.partimeDate}
+                        </View>
+                    </Picker>
                     <AtRadio
                         options={[
                             { label: '男', value: '男', },
@@ -276,6 +279,12 @@ export default class issue extends Component {
                         options={this.state.checkboxOption}
                         selectedList={this.state.personInfomation.checkedList}
                         onChange={this.onCheckChange.bind(this)}
+                    />
+                    <AtTextarea
+                        value={this.state.personInfomatin.note}
+                        onChange={this.onNoteChange.bind(this)}
+                        maxlength='100'
+                        placeholder='备注信息(选填)'
                     />
                     <Button form-type='submit'>提交</Button>
                 </Form>

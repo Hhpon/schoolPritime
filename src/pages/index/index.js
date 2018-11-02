@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Button, Picker } from '@tarojs/components'
-import { AtTabBar } from "taro-ui"
+import { View, Text, Button, Picker, Image } from '@tarojs/components'
+import { AtTabBar, AtIcon } from "taro-ui"
 import './index.scss'
 
 export default class Index extends Component {
@@ -14,9 +14,10 @@ export default class Index extends Component {
     this.state = {
       isScopeOpen: false,
       current: 0,
-      priTime: [],
+      priTimes: [],
       todayDate: '',
-      showDate: ''
+      showDate: '',
+      isShow: false
     }
   }
 
@@ -113,49 +114,79 @@ export default class Index extends Component {
   }
 
   getPritime(current, todayDate) {
-
     Taro.request({
       url: 'http://localhost:3000/getPritime',
       method: 'POST',
       data: { current: current, todayDate: todayDate }
-
     }).then(res => {
-
       let result = res.data.length;
-
       if (!result) {
+        this.setState({
+          isShow: true
+        })
         return;
       }
-
+      console.log(res.data);
       this.setState({
-        priTime: res.data
+        priTimes: res.data
       })
-
     })
   }
 
   ontabChange(e) {
-
     this.setState({
       current: e
     })
     let todayDate = this.state.todayDate;
     this.getPritime(e, todayDate);
-
   }
 
   onDateChange = e => {
-
     let showDate = e.detail.value.slice(5);
     this.setState({
       todayDate: e.detail.value,
       showDate: showDate
     })
     this.getPritime(0, e.detail.value);
+  }
 
+  contactHandle(e) {
+    console.log(e);
   }
 
   render() {
+    const TimeList = this.state.priTimes.map((priTime) => {
+      return (
+        <View className='priTime-container'>
+          <View className='image-con'>
+            <Image src={priTime.avatarUrl} mode='aspectFit' className='image-self'></Image>
+          </View>
+          <View className='user-con'>
+            <View className='nickname-con'>
+              <View>{priTime.nickName}</View>
+              <View>
+                <AtIcon prefixClass='icon' value={(priTime.sex === '男') ? 'nan' : 'nv'} size='20'></AtIcon>
+              </View>
+            </View>
+            <View className='priTime-info'>
+              <View className='infomation'>
+                <Text style='font-weight: bold;'>可替节数：</Text>
+                {priTime.checkedList}
+              </View>
+              <View className='infomation'>
+                <Text style='font-weight: bold;'>价格：</Text>
+                {priTime.price}元
+              </View>
+              <View className='infomation'>
+                <Text style='font-weight: bold;'>微信号：</Text>
+                {priTime.wechatNum}
+              </View>
+              <View onClick={this.contactHandle.bind(this, priTime)}>联系替课</View>
+            </View>
+          </View>
+        </View>
+      )
+    })
     return (
       <View className='index'>
         {
@@ -183,9 +214,16 @@ export default class Index extends Component {
           current={this.state.current}
         />
 
+        <View className='body-container'>
+          {TimeList}
+        </View>
+
+        {
+          isShow &&
           <View>
-            
+            今天还没人发布替课信息~~~
           </View>
+        }
 
         <Picker mode='date' start={this.state.todayDate} onChange={this.onDateChange}>
           <View className='picker-container'>
