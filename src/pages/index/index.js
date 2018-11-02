@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button, Picker, Image } from '@tarojs/components'
-import { AtTabBar, AtIcon } from "taro-ui"
+import { AtTabBar, AtIcon, AtButton } from "taro-ui"
 import './index.scss'
 
 export default class Index extends Component {
@@ -152,6 +152,17 @@ export default class Index extends Component {
 
   contactHandle(e) {
     console.log(e);
+    let _id = e._id;
+    Taro.request({
+      url: 'http://localhost:3000/editOrder',
+      data: {
+        _id: _id,
+        editType: 'contact'
+      }
+    }).then(res => {
+      let todayDate = this.state.todayDate;
+      this.getPritime(0, todayDate);
+    })
   }
 
   render() {
@@ -181,7 +192,9 @@ export default class Index extends Component {
                 <Text style='font-weight: bold;'>微信号：</Text>
                 {priTime.wechatNum}
               </View>
-              <View onClick={this.contactHandle.bind(this, priTime)}>联系替课</View>
+              <View className='button-con'>
+                <AtButton size='small' type='secondary' onClick={this.contactHandle.bind(this, priTime)}>联系替课</AtButton>
+              </View>
             </View>
           </View>
         </View>

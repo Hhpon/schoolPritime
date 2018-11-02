@@ -1,0 +1,43 @@
+.priTime-container {
+    padding: 20px;
+    font-size: 28px;
+    color: #8a8a8a;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    .image-con {
+        height: 80px;
+        width: 80px;
+        border-radius: 50%;
+        overflow: hidden;
+        .image-self {
+            height: 80px;
+            width: 80px;
+        }
+    }
+    .user-con {
+        flex: 1;
+        padding-left: 20px;
+        .nickname-con {
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .priTime-info {
+            .infomation {
+                padding-bottom: 10px;
+            }
+            .button-con {
+                display: flex;
+                justify-content: flex-end;
+                font-size: 28px;
+            }
+        }
+    }
+}
+
+.warnning-container {
+    color: #8a8a8a; // display: flex;
+    // justify-content: center;
+    // align-items: center;
+}

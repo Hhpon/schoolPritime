@@ -37,6 +37,24 @@ export default class mine extends Component {
         })
     }
 
+    onStarting() {
+        Taro.navigateTo({
+            url: '/pages/order/order?type=onStarting'
+        })
+    }
+    
+    onGoing(){
+        Taro.navigateTo({
+            url: '/pages/order/order?type=onGoing'
+        })
+    }
+
+    onCompleting(){
+        Taro.navigateTo({
+            url: '/pages/order/order?type=onCompleting'
+        })
+    }
+
     render() {
         return (
             <View>
