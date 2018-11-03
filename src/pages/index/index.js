@@ -123,12 +123,14 @@ export default class Index extends Component {
       let result = res.data.length;
       if (!result) {
         this.setState({
+          priTimes: res.data,
           isShow: true
         })
         return;
       }
       console.log(res.data);
       this.setState({
+        isShow: false,
         priTimes: res.data
       })
     })
@@ -185,7 +187,7 @@ export default class Index extends Component {
             <View className='priTime-info'>
               <View className='infomation'>
                 <Text style='font-weight: bold;'>可替节数：</Text>
-                {priTime.checkedList}
+                {priTime.timeRadio}
               </View>
               <View className='infomation'>
                 <Text style='font-weight: bold;'>价格：</Text>

@@ -15,7 +15,7 @@ export default class issue extends Component {
         super();
         this.state = {
             dateSel: '',
-            checkboxOption: [
+            timeRadio: [
                 {
                     value: '第一节',
                     label: '第一节',
@@ -45,7 +45,7 @@ export default class issue extends Component {
                 wechatNum: '',
                 price: '',
                 note: '',
-                checkedList: []
+                timeRadio: ''
             }
         }
     }
@@ -77,7 +77,7 @@ export default class issue extends Component {
             personInfomation.wechatNum = result.wechatNum;
             personInfomation.sex = result.sex;
             personInfomation.price = result.price;
-            personInfomation.checkedList = [];
+            personInfomation.timeRadio = '';
             this.setState({
                 personInfomation: personInfomation
             })
@@ -111,12 +111,14 @@ export default class issue extends Component {
         })
     }
 
-    onCheckChange = e => {
+    onTimeChange = e => {
         console.log(e);
         let personInfomation = this.state.personInfomation;
-        personInfomation.checkedList = e;
+        personInfomation.timeRadio = e;
         this.setState({
             personInfomation: personInfomation
+        },()=>{
+            console.log(this.state.personInfomation);
         })
     }
 
@@ -276,10 +278,10 @@ export default class issue extends Component {
                         value={this.state.personInfomation.sex}
                         onClick={this.onSexChange}
                     />
-                    <AtCheckbox
-                        options={this.state.checkboxOption}
-                        selectedList={this.state.personInfomation.checkedList}
-                        onChange={this.onCheckChange.bind(this)}
+                    <AtRadio
+                        options={this.state.timeRadio}
+                        value={this.state.personInfomation.timeRadio}
+                        onClick={this.onTimeChange}
                     />
                     <AtTextarea
                         value={this.state.personInfomatin.note}
