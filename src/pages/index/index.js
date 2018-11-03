@@ -32,7 +32,8 @@ export default class Index extends Component {
   componentDidShow() {
     this.getUserSetting();
     let todayDate = this.onInitializetime();
-    this.getPritime(0, todayDate);
+    let current = this.state.current;
+    this.getPritime(current, todayDate);
   }
 
   componentDidHide() { }
@@ -121,6 +122,7 @@ export default class Index extends Component {
       data: { current: current, todayDate: todayDate }
     }).then(res => {
       let result = res.data.length;
+      console.log(result);
       if (!result) {
         this.setState({
           priTimes: res.data,
@@ -184,8 +186,8 @@ export default class Index extends Component {
       }
     }).then(res => {
       let todayDate = this.state.todayDate;
-      // console.log(todayData);
-      // this.getPritime(0, todayDate);
+      let current = this.state.current;
+      this.getPritime(current, todayDate);
     })
   }
 
