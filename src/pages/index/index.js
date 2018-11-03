@@ -161,6 +161,7 @@ export default class Index extends Component {
       }
     }).then(res => {
       let todayDate = this.state.todayDate;
+      console.log(todayData);
       this.getPritime(0, todayDate);
     })
   }
