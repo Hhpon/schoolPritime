@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button, Picker, Image } from '@tarojs/components'
-import { AtTabBar, AtIcon, AtButton, AtModal, AtInput, AtForm } from "taro-ui"
+import { AtTabBar, AtIcon, AtButton, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtInput, AtForm } from "taro-ui"
 import './index.scss'
 
 export default class Index extends Component {
@@ -155,7 +155,20 @@ export default class Index extends Component {
 
   contactHandle(e) {
     console.log(e);
-
+    wx.showModal({
+      title: '提示',
+      content: '您还没绑定个人信息，请先绑定！',
+      success(res) {
+        if (res.confirm) {
+          console.log('用户点击确定')
+          Taro.navigateTo({
+            url: '/pages/personform/personform'
+          })
+        } else if (res.cancel) {
+          console.log('用户点击取消')
+        }
+      }
+    })
     // let _id = e._id;
     // Taro.request({
     //   url: 'http://localhost:3000/editOrder',
@@ -242,13 +255,6 @@ export default class Index extends Component {
             <View style='height:20px'></View>
             <View style='text-align:center'>今天还没人发布替课信息~~~</View>
           </View>
-
-        }
-        {
-          isShowForm &&
-          <AtModal>
-
-          </AtModal>
         }
 
         <Picker mode='date' start={this.state.todayDate} onChange={this.onDateChange}>

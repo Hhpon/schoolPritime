@@ -12,7 +12,8 @@ class App extends Component {
       'pages/issue/issue',
       'pages/mine/mine',
       'pages/abc/abc',
-      'pages/order/order'
+      'pages/order/order',
+      'pages/personform/personform'
     ],
     window: {
       backgroundTextStyle: 'light',
