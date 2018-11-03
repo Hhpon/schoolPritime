@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Picker, Form, Button } from '@tarojs/components'
-import { AtNoticebar, AtInput, AtRadio, AtCheckbox, AtTextarea } from 'taro-ui'
+import { AtNoticebar, AtInput, AtRadio, AtTextarea } from 'taro-ui'
 import { ptCell } from '../ptCell/ptCell'
 import { pickerCon } from '../pickerCon/pickerCon'
 import './issue.scss'
@@ -158,7 +158,12 @@ export default class issue extends Component {
     }
 
     onNoteChange(e) {
-        console.log(e);
+        console.log(e.detail.value);
+        let personInfomation = this.state.personInfomation;
+        personInfomation.note = e.detail.value;
+        this.setState({
+            personInfomation: personInfomation
+        })
     }
 
     // 点击提交按钮后上传表单内容
@@ -286,7 +291,6 @@ export default class issue extends Component {
                     <AtTextarea
                         value={this.state.personInfomatin.note}
                         onChange={this.onNoteChange.bind(this)}
-                        maxlength='100'
                         placeholder='备注信息(选填)'
                     />
                     <Button form-type='submit' className='button-self'>提交</Button>

@@ -30,7 +30,11 @@
             .button-con {
                 display: flex;
                 justify-content: flex-end;
+                align-items: center;
                 font-size: 28px;
+                .isshow-button{
+                    padding-left: 10px;
+                }
             }
         }
     }

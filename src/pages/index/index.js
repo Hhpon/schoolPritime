@@ -62,7 +62,7 @@ export default class Index extends Component {
           Taro.getUserInfo({
             success(res) {
               let userInfo = JSON.parse(res.rawData)
-              let openid = wx.getStorageSync('openid')
+              let openid = Taro.getStorageSync('openid')
               if (openid) {
                 // Do something with return value
                 Taro.request({
@@ -155,32 +155,38 @@ export default class Index extends Component {
 
   contactHandle(e) {
     console.log(e);
-    wx.showModal({
-      title: '提示',
-      content: '您还没绑定个人信息，请先绑定！',
-      success(res) {
-        if (res.confirm) {
-          console.log('用户点击确定')
-          Taro.navigateTo({
-            url: '/pages/personform/personform'
-          })
-        } else if (res.cancel) {
-          console.log('用户点击取消')
+    const personalInfo = Taro.getStorageSync('personalInfo');
+    console.log(personalInfo);
+    if (!personalInfo) {
+      wx.showModal({
+        title: '提示',
+        content: '您还没绑定个人信息，请先绑定！',
+        success(res) {
+          if (res.confirm) {
+            console.log('用户点击确定')
+            Taro.navigateTo({
+              url: '/pages/personform/personform'
+            })
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
         }
+      })
+      return;
+    }
+    let _id = e._id;
+    const openId = Taro.getStorageSync('openid');
+    Taro.request({
+      url: 'http://localhost:3000/orderContact',
+      data: {
+        _id: _id,
+        openId: openId
       }
+    }).then(res => {
+      let todayDate = this.state.todayDate;
+      // console.log(todayData);
+      // this.getPritime(0, todayDate);
     })
-    // let _id = e._id;
-    // Taro.request({
-    //   url: 'http://localhost:3000/editOrder',
-    //   data: {
-    //     _id: _id,
-    //     editType: 'contact'
-    //   }
-    // }).then(res => {
-    //   let todayDate = this.state.todayDate;
-    //   console.log(todayData);
-    //   this.getPritime(0, todayDate);
-    // })
   }
 
   render() {
