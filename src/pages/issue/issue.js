@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Picker, Button, Form } from '@tarojs/components'
-import { AtNoticebar, AtInput, AtForm, AtRadio, AtCheckbox, AtTextarea } from 'taro-ui'
+import { View, Picker, Form, Button } from '@tarojs/components'
+import { AtNoticebar, AtInput, AtRadio, AtCheckbox, AtTextarea } from 'taro-ui'
 import { ptCell } from '../ptCell/ptCell'
 import { pickerCon } from '../pickerCon/pickerCon'
 import './issue.scss'
@@ -225,11 +225,11 @@ export default class issue extends Component {
 
     render() {
         return (
-            <View>
+            <View className='container'>
                 <AtNoticebar icon='volume-plus'>
                     请认真填写，兼职时间提交之后不能修改！
                 </AtNoticebar>
-                <Form onSubmit={this.submitHandle} reportSubmit>
+                <Form onSubmit={this.submitHandle} reportSubmit className='form-container'>
                     <AtInput
                         name='value1'
                         title='真实姓名'
@@ -263,8 +263,9 @@ export default class issue extends Component {
                         onChange={this.onwechatNumChange.bind(this)}
                     />
                     <Picker mode='date' start={this.state.personInfomation.partimeDate} onChange={this.onDateChange}>
-                        <View className='picker'>
-                            兼职日期：{this.state.personInfomation.partimeDate}
+                        <View className='picker-container'>
+                            <View className='picker-title'>兼职日期</View>
+                            <View>{this.state.personInfomation.partimeDate}</View>
                         </View>
                     </Picker>
                     <AtRadio
@@ -286,7 +287,7 @@ export default class issue extends Component {
                         maxlength='100'
                         placeholder='备注信息(选填)'
                     />
-                    <Button form-type='submit'>提交</Button>
+                    <Button form-type='submit' className='button-self'>提交</Button>
                 </Form>
             </View>
         )

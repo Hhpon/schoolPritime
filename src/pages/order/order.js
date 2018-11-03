@@ -110,11 +110,13 @@ export default class order extends Component {
               </View>
               <View className='button-con'>
                 <AtButton size='small' type='secondary' onClick={this.delHandle.bind(this, priTime)}>删除</AtButton>
-                {/* {
-                    navigatorType && */}
-                <View style="width:5px;"></View>
-                <AtButton size='small' type='secondary' onClick={this.completeHandle.bind(this, priTime)}>完成</AtButton>
-                {/* } */}
+                {
+                  navigatorType !== 'onCompleting' &&
+                  <View>
+                    <View style="width:5px;"></View>
+                    <AtButton size='small' type='secondary' onClick={this.completeHandle.bind(this, priTime)}>完成</AtButton>
+                  </View>
+                }
               </View>
             </View>
           </View>
@@ -126,6 +128,7 @@ export default class order extends Component {
         {
           isShowwarn &&
           <View className='warnning-container'>
+
             <View style='height:20px'></View>
             <View style='text-align:center'>您还没有这类订单~~~</View>
           </View>

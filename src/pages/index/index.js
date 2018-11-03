@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button, Picker, Image } from '@tarojs/components'
-import { AtTabBar, AtIcon, AtButton } from "taro-ui"
+import { AtTabBar, AtIcon, AtButton, AtModal, AtInput, AtForm } from "taro-ui"
 import './index.scss'
 
 export default class Index extends Component {
@@ -17,6 +17,7 @@ export default class Index extends Component {
       priTimes: [],
       todayDate: '',
       showDate: '',
+      isShowForm: false,
       isShow: false
     }
   }
@@ -152,18 +153,19 @@ export default class Index extends Component {
 
   contactHandle(e) {
     console.log(e);
-    let _id = e._id;
-    Taro.request({
-      url: 'http://localhost:3000/editOrder',
-      data: {
-        _id: _id,
-        editType: 'contact'
-      }
-    }).then(res => {
-      let todayDate = this.state.todayDate;
-      console.log(todayData);
-      this.getPritime(0, todayDate);
-    })
+
+    // let _id = e._id;
+    // Taro.request({
+    //   url: 'http://localhost:3000/editOrder',
+    //   data: {
+    //     _id: _id,
+    //     editType: 'contact'
+    //   }
+    // }).then(res => {
+    //   let todayDate = this.state.todayDate;
+    //   console.log(todayData);
+    //   this.getPritime(0, todayDate);
+    // })
   }
 
   render() {
@@ -234,9 +236,17 @@ export default class Index extends Component {
 
         {
           isShow &&
-          <View>
-            今天还没人发布替课信息~~~
+          <View className='warnning-container'>
+            <View style='height:20px'></View>
+            <View style='text-align:center'>今天还没人发布替课信息~~~</View>
           </View>
+
+        }
+        {
+          isShowForm &&
+          <AtModal>
+
+          </AtModal>
         }
 
         <Picker mode='date' start={this.state.todayDate} onChange={this.onDateChange}>
