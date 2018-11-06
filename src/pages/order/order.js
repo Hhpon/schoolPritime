@@ -24,7 +24,7 @@ export default class order extends Component {
   }
 
   getOrder(navigatorType) {
-    let openid = wx.getStorageSync('openid')
+    let openid = Taro.getStorageSync('openid')
     Taro.request({
       url: 'http://localhost:3000/getOrder',
       data: {
@@ -37,7 +37,8 @@ export default class order extends Component {
       if (!length) {
         this.setState({
           navigatorType: navigatorType,
-          isShowwarn: true
+          isShowwarn: true,
+          priTimes: res.data
         })
         return;
       }
@@ -57,11 +58,23 @@ export default class order extends Component {
         _id: _id,
         editType: 'complete'
       }
-    }).then(res => {
-      console.log(this.state.navigatorType);
-      let navigatorType = this.state.navigatorType;
-      this.getOrder(navigatorType);
     })
+    let navigatorType = this.state.navigatorType;
+    this.getOrder(navigatorType);
+  }
+
+  returnHandle(e) {
+    console.log(e);
+    let _id = e._id;
+    Taro.request({
+      url: 'http://localhost:3000/editOrder',
+      data: {
+        _id: _id,
+        editType: 'return'
+      }
+    })
+    let navigatorType = this.state.navigatorType;
+    this.getOrder(navigatorType);
   }
 
   delHandle(e) {
@@ -73,10 +86,9 @@ export default class order extends Component {
         _id: _id,
         editType: 'del'
       }
-    }).then(res => {
-      let navigatorType = this.state.navigatorType;
-      this.getOrder(navigatorType);
     })
+    let navigatorType = this.state.navigatorType;
+    this.getOrder(navigatorType);
   }
 
   render() {
@@ -98,7 +110,7 @@ export default class order extends Component {
             <View className='priTime-info'>
               <View className='infomation'>
                 <Text style='font-weight: bold;'>可替节数：</Text>
-                {priTime.checkedList}
+                {priTime.timeRadio}
               </View>
               <View className='infomation'>
                 <Text style='font-weight: bold;'>价格：</Text>
@@ -108,8 +120,30 @@ export default class order extends Component {
                 <Text style='font-weight: bold;'>微信号：</Text>
                 {priTime.wechatNum}
               </View>
+              <View className='infomation'>
+                <Text style='font-weight: bold;'>寻找人姓名：</Text>
+                {priTime.contactName}
+              </View>
+              <View className='infomation'>
+                <Text style='font-weight: bold;'>寻找人性别：</Text>
+                {priTime.contactSex}
+              </View>
+              <View className='infomation'>
+                <Text style='font-weight: bold;'>寻找人微信：</Text>
+                {priTime.contactWechatNum}
+              </View>
+              <View className='infomation'>
+                <Text style='font-weight: bold;'>寻找人电话：</Text>
+                {priTime.contactTelNum}
+              </View>
               <View className='button-con'>
                 <AtButton size='small' type='secondary' onClick={this.delHandle.bind(this, priTime)}>删除</AtButton>
+                {
+                  navigatorType === 'onGoing' &&
+                  <View className='isshow-button'>
+                    <AtButton size='small' type='secondary' onClick={this.returnHandle.bind(this, priTime)}>接单失败</AtButton>
+                  </View>
+                }
                 {
                   navigatorType !== 'onCompleting' &&
                   <View className='isshow-button'>

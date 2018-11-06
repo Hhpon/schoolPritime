@@ -134,8 +134,8 @@ export default class personform extends Component {
 
     render() {
         return (
-            <View>
-                <Form onSubmit={this.submitHandle} reportSubmit className='form-container'>
+            <View className='form-container'>
+                <Form onSubmit={this.submitHandle} reportSubmit>
                     <AtInput
                         name='value1'
                         title='真实姓名'

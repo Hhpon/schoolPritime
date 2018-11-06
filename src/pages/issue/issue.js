@@ -168,7 +168,7 @@ export default class issue extends Component {
 
     // 点击提交按钮后上传表单内容
     submitHandle(e) {
-        console.log(e.detail);
+        console.log(e.detail.formId);
         let personInfomation = this.state.personInfomation;
         const openId = Taro.getStorageSync('openid');
 

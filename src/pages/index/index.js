@@ -56,16 +56,19 @@ export default class Index extends Component {
     Taro.getSetting({
       success(res) {
         if (!res.authSetting['scope.userInfo']) {
+          console.log('用户未授权');
           that.setState({
             isScopeOpen: true
           })
         } else {
+          console.log('用户已授权');
           Taro.getUserInfo({
             success(res) {
               let userInfo = JSON.parse(res.rawData)
               let openid = Taro.getStorageSync('openid')
               if (openid) {
                 // Do something with return value
+                // http://localhost:3000/updateUserinfo
                 Taro.request({
                   url: 'http://localhost:3000/updateUserinfo',
                   method: 'POST',
@@ -212,7 +215,7 @@ export default class Index extends Component {
               </View>
               <View className='infomation'>
                 <Text style='font-weight: bold;'>价格：</Text>
-                {priTime.price}元
+                {priTime.price}
               </View>
               <View className='infomation'>
                 <Text style='font-weight: bold;'>微信号：</Text>
