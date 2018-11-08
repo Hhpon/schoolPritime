@@ -93,7 +93,7 @@ export default class personform extends Component {
         }
 
         Taro.request({
-            url: 'http://localhost:3000/addUserInfo',
+            url: 'http://localhost:3001/addUserInfo',
             method: 'POST',
             data: {
                 personInfomation: this.state.personInfomation,

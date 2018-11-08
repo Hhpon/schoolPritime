@@ -1,8 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Picker, Form, Button } from '@tarojs/components'
 import { AtNoticebar, AtInput, AtRadio, AtTextarea } from 'taro-ui'
-import { ptCell } from '../ptCell/ptCell'
-import { pickerCon } from '../pickerCon/pickerCon'
 import './issue.scss'
 
 export default class issue extends Component {
@@ -61,7 +59,7 @@ export default class issue extends Component {
     getUserRecord() {
         const openId = Taro.getStorageSync('openid');
         Taro.request({
-            url: 'http://localhost:3000/getUserRecord',
+            url: 'http://localhost:3001/getUserRecord',
             data: {
                 openId: openId
             }
@@ -195,7 +193,7 @@ export default class issue extends Component {
         }
 
         Taro.request({
-            url: 'http://localhost:3000/issuePritime',
+            url: 'http://localhost:3001/issuePritime',
             method: 'POST',
             data: {
                 personInfomation: this.state.personInfomation,

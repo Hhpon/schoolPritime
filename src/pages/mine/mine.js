@@ -26,7 +26,7 @@ export default class mine extends Component {
         console.log(openId);
         Taro.request({
             // https://weapp.hhp.im
-            url: 'http://localhost:3000/getUserinfo',
+            url: 'http://localhost:3001/getUserinfo',
             data: {
                 openId: openId
             }

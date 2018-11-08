@@ -26,7 +26,7 @@ export default class order extends Component {
   getOrder(navigatorType) {
     let openid = Taro.getStorageSync('openid')
     Taro.request({
-      url: 'http://localhost:3000/getOrder',
+      url: 'http://localhost:3001/getOrder',
       data: {
         openid: openid,
         navigatorType: navigatorType
@@ -53,7 +53,7 @@ export default class order extends Component {
     console.log(e);
     let _id = e._id;
     Taro.request({
-      url: 'http://localhost:3000/editOrder',
+      url: 'http://localhost:3001/editOrder',
       data: {
         _id: _id,
         editType: 'complete'
@@ -67,7 +67,7 @@ export default class order extends Component {
     console.log(e);
     let _id = e._id;
     Taro.request({
-      url: 'http://localhost:3000/editOrder',
+      url: 'http://localhost:3001/editOrder',
       data: {
         _id: _id,
         editType: 'return'
@@ -81,7 +81,7 @@ export default class order extends Component {
     console.log(e);
     let _id = e._id;
     Taro.request({
-      url: 'http://localhost:3000/editOrder',
+      url: 'http://localhost:3001/editOrder',
       data: {
         _id: _id,
         editType: 'del'
@@ -114,7 +114,7 @@ export default class order extends Component {
               </View>
               <View className='infomation'>
                 <Text style='font-weight: bold;'>价格：</Text>
-                {priTime.price}元
+                {priTime.price}
               </View>
               <View className='infomation'>
                 <Text style='font-weight: bold;'>微信号：</Text>

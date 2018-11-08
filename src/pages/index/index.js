@@ -68,9 +68,9 @@ export default class Index extends Component {
               let openid = Taro.getStorageSync('openid')
               if (openid) {
                 // Do something with return value
-                // http://localhost:3000/updateUserinfo
+                // http://localhost:3001/updateUserinfo
                 Taro.request({
-                  url: 'http://localhost:3000/updateUserinfo',
+                  url: 'http://localhost:3001/updateUserinfo',
                   method: 'POST',
                   data: {
                     openid: openid,
@@ -98,7 +98,7 @@ export default class Index extends Component {
       Taro.login({
         success(res) {
           Taro.request({
-            url: 'http://localhost:3000/onLogin',
+            url: 'http://localhost:3001/onLogin',
             method: 'POST',
             data: {
               code: res.code,
@@ -120,7 +120,7 @@ export default class Index extends Component {
 
   getPritime(current, todayDate) {
     Taro.request({
-      url: 'http://localhost:3000/getPritime',
+      url: 'http://localhost:3001/getPritime',
       method: 'POST',
       data: { current: current, todayDate: todayDate }
     }).then(res => {
@@ -182,7 +182,7 @@ export default class Index extends Component {
     let _id = e._id;
     const openId = Taro.getStorageSync('openid');
     Taro.request({
-      url: 'http://localhost:3000/orderContact',
+      url: 'http://localhost:3001/orderContact',
       data: {
         _id: _id,
         openId: openId
@@ -236,8 +236,9 @@ export default class Index extends Component {
           <View className='model-container'>
             <View style='height:30%'></View>
             <View className='dialog-container'>
+              <View style='height:10px'></View>
               <View className='dialog-header'>提示</View>
-              <View className='dialog-content'>请允许用户授权完成</View>
+              <View className='dialog-content'>请允许用户授权</View>
               <View className='dialog-handle'>
                 <Button hover-stop-propagation className='dialog-button' openType='getUserInfo' onGetUserInfo={this.getUserinfomation}>确定</Button>
               </View>
