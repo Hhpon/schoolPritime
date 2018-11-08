@@ -120,22 +120,27 @@ export default class order extends Component {
                 <Text style='font-weight: bold;'>微信号：</Text>
                 {priTime.wechatNum}
               </View>
-              <View className='infomation'>
-                <Text style='font-weight: bold;'>寻找人姓名：</Text>
-                {priTime.contactName}
-              </View>
-              <View className='infomation'>
-                <Text style='font-weight: bold;'>寻找人性别：</Text>
-                {priTime.contactSex}
-              </View>
-              <View className='infomation'>
-                <Text style='font-weight: bold;'>寻找人微信：</Text>
-                {priTime.contactWechatNum}
-              </View>
-              <View className='infomation'>
-                <Text style='font-weight: bold;'>寻找人电话：</Text>
-                {priTime.contactTelNum}
-              </View>
+              {
+                navigatorType === 'onGoing' &&
+                <View>
+                  <View className='infomation'>
+                    <Text style='font-weight: bold;'>寻找人姓名：</Text>
+                    {priTime.contactName}
+                  </View>
+                  <View className='infomation'>
+                    <Text style='font-weight: bold;'>寻找人性别：</Text>
+                    {priTime.contactSex}
+                  </View>
+                  <View className='infomation'>
+                    <Text style='font-weight: bold;'>寻找人微信：</Text>
+                    {priTime.contactWechatNum}
+                  </View>
+                  <View className='infomation'>
+                    <Text style='font-weight: bold;'>寻找人电话：</Text>
+                    {priTime.contactTelNum}
+                  </View>
+                </View>
+              }
               <View className='button-con'>
                 <AtButton size='small' type='secondary' onClick={this.delHandle.bind(this, priTime)}>删除</AtButton>
                 {

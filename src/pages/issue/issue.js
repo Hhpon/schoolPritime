@@ -170,6 +170,7 @@ export default class issue extends Component {
     submitHandle(e) {
         console.log(e.detail.formId);
         let personInfomation = this.state.personInfomation;
+        let formId = e.detail.formId;
         const openId = Taro.getStorageSync('openid');
 
         for (let item in personInfomation) {
@@ -198,7 +199,8 @@ export default class issue extends Component {
             method: 'POST',
             data: {
                 personInfomation: this.state.personInfomation,
-                openId: openId
+                openId: openId,
+                formId: formId
             }
         }).then(res => {
             if (res.data === 'no') {
