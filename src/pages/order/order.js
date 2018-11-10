@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View } from '@tarojs/components'
-import { AtButton } from 'taro-ui'
+import { View, Button, Form } from '@tarojs/components'
+import { AtButton, AtForm } from 'taro-ui'
 
 import './order.scss'
 
@@ -14,6 +14,7 @@ export default class order extends Component {
     this.state = {
       isShowwarn: false,
       navigatorType: '',
+      formId: '',
       priTimes: []
     }
   }
@@ -63,18 +64,32 @@ export default class order extends Component {
     this.getOrder(navigatorType);
   }
 
-  returnHandle(e) {
-    console.log(e);
-    let _id = e._id;
-    Taro.request({
-      url: 'https://weapp.hhp.im/editOrder',
-      data: {
-        _id: _id,
-        editType: 'return'
-      }
+  returnHandle (e) {
+    Taro.showLoading({
+      title: '加载中',
     })
-    let navigatorType = this.state.navigatorType;
-    this.getOrder(navigatorType);
+    setTimeout(() => {
+      let formId = this.state.formId;
+      let _id = e._id;
+      Taro.request({
+        url: 'https://weapp.hhp.im/editOrder',
+        data: {
+          _id: _id,
+          editType: 'return',
+          formId: formId
+        }
+      })
+      let navigatorType = this.state.navigatorType;
+      this.getOrder(navigatorType);
+      Taro.hideLoading()
+    }, 1000);
+  }
+
+  changeFormId(e) {
+    console.log(e);
+    this.setState({
+      formId: e.detail.formId
+    })
   }
 
   delHandle(e) {
@@ -146,7 +161,9 @@ export default class order extends Component {
                 {
                   navigatorType === 'onGoing' &&
                   <View className='isshow-button'>
-                    <AtButton size='small' type='secondary' onClick={this.returnHandle.bind(this, priTime)}>接单失败</AtButton>
+                    <AtForm onSubmit={this.changeFormId} reportSubmit className='form-self'>
+                      <AtButton size='small' type='secondary' onClick={this.returnHandle.bind(this, priTime)} formType='submit'>接单失败</AtButton>
+                    </AtForm>
                   </View>
                 }
                 {

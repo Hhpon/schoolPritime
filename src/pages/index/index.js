@@ -190,7 +190,6 @@ export default class Index extends Component {
         openId: openId
       }
     }).then(res => {
-      console.log(res.data);
       if (res.data == 'already') {
         Taro.showModal({
           title: '提示',
@@ -202,7 +201,6 @@ export default class Index extends Component {
             }
           }
         })
-        return;
       }
       let todayDate = this.state.todayDate;
       let current = this.state.current;
