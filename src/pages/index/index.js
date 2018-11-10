@@ -97,6 +97,7 @@ export default class Index extends Component {
       })
       Taro.login({
         success(res) {
+          console.log(res);
           Taro.request({
             url: 'http://localhost:3001/onLogin',
             method: 'POST',
@@ -105,13 +106,13 @@ export default class Index extends Component {
               userInfo: userInfo
             }
           }).then(res => {
-            console.log(res);
-          })
-          that.setState({
-            openId: res.code
-          })
-          Taro.setStorage({ key: 'openid', data: res.code }).then(res => {
-            console.log('存储成功');
+            console.log(res.data);
+            that.setState({
+              openId: res.data
+            })
+            Taro.setStorage({ key: 'openid', data: res.data }).then(res => {
+              console.log('存储成功');
+            })
           })
         }
       })
@@ -181,6 +182,7 @@ export default class Index extends Component {
     }
     let _id = e._id;
     const openId = Taro.getStorageSync('openid');
+    console.log(openId);
     Taro.request({
       url: 'http://localhost:3001/orderContact',
       data: {
@@ -188,6 +190,20 @@ export default class Index extends Component {
         openId: openId
       }
     }).then(res => {
+      console.log(res.data);
+      if (res.data !== 'ok') {
+        Taro.showModal({
+          title: '提示',
+          content: '模板消息发送失败，请稍后重试！',
+          showCancel: false,
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+            }
+          }
+        })
+        return;
+      }
       let todayDate = this.state.todayDate;
       let current = this.state.current;
       this.getPritime(current, todayDate);

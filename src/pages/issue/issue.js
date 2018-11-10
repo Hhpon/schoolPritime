@@ -175,7 +175,7 @@ export default class issue extends Component {
             if (item !== 'note') {
                 let length = personInfomation[item].length;
                 if (!length) {
-                    wx.showModal({
+                    Taro.showModal({
                         title: '提示',
                         content: '请填写完整再提交',
                         showCancel: false,
@@ -202,7 +202,7 @@ export default class issue extends Component {
             }
         }).then(res => {
             if (res.data === 'no') {
-                wx.showModal({
+                Taro.showModal({
                     title: '提示',
                     content: '请填写完整再提交',
                     showCancel: false,
