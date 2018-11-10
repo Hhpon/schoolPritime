@@ -59,7 +59,7 @@ export default class issue extends Component {
     getUserRecord() {
         const openId = Taro.getStorageSync('openid');
         Taro.request({
-            url: 'http://localhost:3001/getUserRecord',
+            url: 'https://weapp.hhp.im/getUserRecord',
             data: {
                 openId: openId
             }
@@ -193,7 +193,7 @@ export default class issue extends Component {
         }
 
         Taro.request({
-            url: 'http://localhost:3001/issuePritime',
+            url: 'https://weapp.hhp.im/issuePritime',
             method: 'POST',
             data: {
                 personInfomation: this.state.personInfomation,

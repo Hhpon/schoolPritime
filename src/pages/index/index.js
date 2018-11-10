@@ -68,9 +68,9 @@ export default class Index extends Component {
               let openid = Taro.getStorageSync('openid')
               if (openid) {
                 // Do something with return value
-                // http://localhost:3001/updateUserinfo
+                // https://weapp.hhp.im/updateUserinfo
                 Taro.request({
-                  url: 'http://localhost:3001/updateUserinfo',
+                  url: 'https://weapp.hhp.im/updateUserinfo',
                   method: 'POST',
                   data: {
                     openid: openid,
@@ -99,7 +99,7 @@ export default class Index extends Component {
         success(res) {
           console.log(res);
           Taro.request({
-            url: 'http://localhost:3001/onLogin',
+            url: 'https://weapp.hhp.im/onLogin',
             method: 'POST',
             data: {
               code: res.code,
@@ -121,7 +121,7 @@ export default class Index extends Component {
 
   getPritime(current, todayDate) {
     Taro.request({
-      url: 'http://localhost:3001/getPritime',
+      url: 'https://weapp.hhp.im/getPritime',
       method: 'POST',
       data: { current: current, todayDate: todayDate }
     }).then(res => {
@@ -184,7 +184,7 @@ export default class Index extends Component {
     const openId = Taro.getStorageSync('openid');
     console.log(openId);
     Taro.request({
-      url: 'http://localhost:3001/orderContact',
+      url: 'https://weapp.hhp.im/orderContact',
       data: {
         _id: _id,
         openId: openId

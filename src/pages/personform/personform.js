@@ -93,7 +93,7 @@ export default class personform extends Component {
         }
 
         Taro.request({
-            url: 'http://localhost:3001/addUserInfo',
+            url: 'https://weapp.hhp.im/addUserInfo',
             method: 'POST',
             data: {
                 personInfomation: this.state.personInfomation,
