@@ -191,10 +191,10 @@ export default class Index extends Component {
       }
     }).then(res => {
       console.log(res.data);
-      if (res.data !== 'ok') {
+      if (res.data == 'already') {
         Taro.showModal({
           title: '提示',
-          content: '模板消息发送失败，请稍后重试！',
+          content: '该单已经被接，请换其他的试试',
           showCancel: false,
           success(res) {
             if (res.confirm) {
