@@ -24,7 +24,7 @@ export default class myorder extends Component {
   getMyOrder() {
     let openId = Taro.getStorageSync('openid')
     Taro.request({
-      url: 'http://localhost:3001/getMyOrder',
+      url: 'https://weapp.hhp.im/getMyOrder',
       data: {
         openId: openId,
       }
