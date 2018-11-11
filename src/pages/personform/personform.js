@@ -169,6 +169,7 @@ export default class personform extends Component {
                         onClick={this.onSexChange}
                     />
                     <AtTextarea
+                        count={false}
                         value={this.state.personInfomatin.note}
                         onChange={this.onNoteChange.bind(this)}
                         maxlength='100'

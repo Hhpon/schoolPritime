@@ -115,7 +115,7 @@ export default class issue extends Component {
         personInfomation.timeRadio = e;
         this.setState({
             personInfomation: personInfomation
-        },()=>{
+        }, () => {
             console.log(this.state.personInfomation);
         })
     }
@@ -289,8 +289,10 @@ export default class issue extends Component {
                         onClick={this.onTimeChange}
                     />
                     <AtTextarea
+                        count={false}
                         value={this.state.personInfomatin.note}
                         onChange={this.onNoteChange.bind(this)}
+                        maxlength='100'
                         placeholder='备注信息(选填)'
                     />
                     <Button form-type='submit' className='button-self'>提交</Button>
