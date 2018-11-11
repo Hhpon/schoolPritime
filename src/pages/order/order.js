@@ -27,7 +27,7 @@ export default class order extends Component {
   getOrder(navigatorType) {
     let openid = Taro.getStorageSync('openid')
     Taro.request({
-      url: 'https://weapp.hhp.im/getOrder',
+      url: 'http://localhost:3001/getOrder',
       data: {
         openid: openid,
         navigatorType: navigatorType
@@ -54,7 +54,7 @@ export default class order extends Component {
     console.log(e);
     let _id = e._id;
     Taro.request({
-      url: 'https://weapp.hhp.im/editOrder',
+      url: 'http://localhost:3001/editOrder',
       data: {
         _id: _id,
         editType: 'complete'
@@ -64,7 +64,7 @@ export default class order extends Component {
     this.getOrder(navigatorType);
   }
 
-  returnHandle (e) {
+  returnHandle(e) {
     Taro.showLoading({
       title: '加载中',
     })
@@ -72,7 +72,7 @@ export default class order extends Component {
       let formId = this.state.formId;
       let _id = e._id;
       Taro.request({
-        url: 'https://weapp.hhp.im/editOrder',
+        url: 'http://localhost:3001/editOrder',
         data: {
           _id: _id,
           editType: 'return',
@@ -96,7 +96,7 @@ export default class order extends Component {
     console.log(e);
     let _id = e._id;
     Taro.request({
-      url: 'https://weapp.hhp.im/editOrder',
+      url: 'http://localhost:3001/editOrder',
       data: {
         _id: _id,
         editType: 'del'

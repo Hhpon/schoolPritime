@@ -25,8 +25,8 @@ export default class mine extends Component {
         const openId = Taro.getStorageSync('openid');
         console.log(openId);
         Taro.request({
-            // https://weapp.hhp.im
-            url: 'https://weapp.hhp.im/getUserinfo',
+            // http://localhost:3001
+            url: 'http://localhost:3001/getUserinfo',
             data: {
                 openId: openId
             }
@@ -56,6 +56,12 @@ export default class mine extends Component {
         })
     }
 
+    onMyorder(){
+        Taro.navigateTo({
+            url: '/pages/myorder/myorder'
+        }) 
+    }
+
     render() {
         return (
             <View>
@@ -70,8 +76,8 @@ export default class mine extends Component {
                         <View className='name-con'>{this.state.userInfo.nickName}</View>
                     </View>
                     <View className='mine-order'>
-                        <View className='order-top'>
-                            <Text>我的记录</Text>
+                        <View className='order-top' onClick={this.onMyorder}>
+                            <Text>我的求助</Text>
                             <View className='ordertop-right'>
                                 <AtIcon value='chevron-right' size='15' color='#868281'></AtIcon>
                             </View>

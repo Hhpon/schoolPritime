@@ -68,9 +68,9 @@ export default class Index extends Component {
               let openid = Taro.getStorageSync('openid')
               if (openid) {
                 // Do something with return value
-                // https://weapp.hhp.im/updateUserinfo
+                // http://localhost:3001/updateUserinfo
                 Taro.request({
-                  url: 'https://weapp.hhp.im/updateUserinfo',
+                  url: 'http://localhost:3001/updateUserinfo',
                   method: 'POST',
                   data: {
                     openid: openid,
@@ -99,7 +99,7 @@ export default class Index extends Component {
         success(res) {
           console.log(res);
           Taro.request({
-            url: 'https://weapp.hhp.im/onLogin',
+            url: 'http://localhost:3001/onLogin',
             method: 'POST',
             data: {
               code: res.code,
@@ -121,7 +121,7 @@ export default class Index extends Component {
 
   getPritime(current, todayDate) {
     Taro.request({
-      url: 'https://weapp.hhp.im/getPritime',
+      url: 'http://localhost:3001/getPritime',
       method: 'POST',
       data: { current: current, todayDate: todayDate }
     }).then(res => {
@@ -184,16 +184,27 @@ export default class Index extends Component {
     const openId = Taro.getStorageSync('openid');
     console.log(openId);
     Taro.request({
-      url: 'https://weapp.hhp.im/orderContact',
+      url: 'http://localhost:3001/orderContact',
       data: {
         _id: _id,
         openId: openId
       }
     }).then(res => {
-      if (res.data == 'already') {
+      if (res.data === 'already') {
         Taro.showModal({
           title: '提示',
           content: '该单已经被接，请换其他的试试',
+          showCancel: false,
+          success(res) {
+            if (res.confirm) {
+              console.log('用户点击确定')
+            }
+          }
+        })
+      }else if(res.data === 'same'){
+        Taro.showModal({
+          title: '提示',
+          content: '不能接自己的单哦！',
           showCancel: false,
           success(res) {
             if (res.confirm) {
