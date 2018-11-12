@@ -52,7 +52,7 @@ export default class myorder extends Component {
         return;
       }
       this.setState({
-        myOrder: res.data
+        myOrder: res.data.reverse()
       })
     })
   }

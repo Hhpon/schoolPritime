@@ -115,8 +115,6 @@ export default class issue extends Component {
         personInfomation.timeRadio = e;
         this.setState({
             personInfomation: personInfomation
-        }, () => {
-            console.log(this.state.personInfomation);
         })
     }
 
@@ -138,7 +136,6 @@ export default class issue extends Component {
     }
 
     onTelChange(e) {
-        console.log(e);
         let personInfomation = this.state.personInfomation;
         personInfomation.telNum = e;
         this.setState({
@@ -147,7 +144,6 @@ export default class issue extends Component {
     }
 
     onwechatNumChange(e) {
-        console.log(e);
         let personInfomation = this.state.personInfomation;
         personInfomation.wechatNum = e;
         this.setState({
@@ -156,7 +152,6 @@ export default class issue extends Component {
     }
 
     onNoteChange(e) {
-        console.log(e.detail.value);
         let personInfomation = this.state.personInfomation;
         personInfomation.note = e.detail.value;
         this.setState({

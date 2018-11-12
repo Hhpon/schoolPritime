@@ -45,7 +45,7 @@ export default class order extends Component {
       }
       this.setState({
         navigatorType: navigatorType,
-        priTimes: res.data
+        priTimes: res.data.reverse()
       })
     })
   }
@@ -86,7 +86,6 @@ export default class order extends Component {
   }
 
   changeFormId(e) {
-    console.log(e);
     this.setState({
       formId: e.detail.formId
     })
@@ -124,6 +123,10 @@ export default class order extends Component {
             </View>
             <View className='priTime-info'>
               <View className='infomation'>
+                <Text style='font-weight: bold;'>可替日期：</Text>
+                {priTime.partimeDate}
+              </View>
+              <View className='infomation'>
                 <Text style='font-weight: bold;'>可替节数：</Text>
                 {priTime.timeRadio}
               </View>
@@ -157,7 +160,10 @@ export default class order extends Component {
                 </View>
               }
               <View className='button-con'>
-                <AtButton size='small' type='secondary' onClick={this.delHandle.bind(this, priTime)}>删除</AtButton>
+                {
+                  navigatorType !== 'onGoing' &&
+                  <AtButton size='small' type='secondary' onClick={this.delHandle.bind(this, priTime)}>删除</AtButton>
+                }
                 {
                   navigatorType === 'onGoing' &&
                   <View className='isshow-button'>

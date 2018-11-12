@@ -1,7 +1,8 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View, Text, Button, Picker, Image } from '@tarojs/components'
-import { AtTabBar, AtIcon, AtButton, AtModal, AtModalHeader, AtModalContent, AtModalAction, AtInput, AtForm } from "taro-ui"
+import { AtTabBar, AtIcon, AtButton, AtForm } from "taro-ui"
 import './index.scss'
+import { rejects } from 'assert';
 
 export default class Index extends Component {
 
@@ -18,7 +19,8 @@ export default class Index extends Component {
       todayDate: '',
       showDate: '',
       isShowForm: false,
-      isShow: false
+      isShow: false,
+      formId: ''
     }
   }
 
@@ -126,7 +128,6 @@ export default class Index extends Component {
       data: { current: current, todayDate: todayDate }
     }).then(res => {
       let result = res.data.length;
-      console.log(result);
       if (!result) {
         this.setState({
           priTimes: res.data,
@@ -134,10 +135,9 @@ export default class Index extends Component {
         })
         return;
       }
-      console.log(res.data);
       this.setState({
         isShow: false,
-        priTimes: res.data
+        priTimes: res.data.reverse()
       })
     })
   }
@@ -159,10 +159,23 @@ export default class Index extends Component {
     this.getPritime(0, e.detail.value);
   }
 
-  contactHandle(e) {
+  changeFormId(e) {
+    this.setState({
+      formId: e.detail.formId
+    })
+  }
+
+  wait(timeout) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve('ok')
+      }, timeout);
+    })
+  }
+
+  async contactHandle(e) {
     console.log(e);
     const personalInfo = Taro.getStorageSync('personalInfo');
-    console.log(personalInfo);
     if (!personalInfo) {
       wx.showModal({
         title: '提示',
@@ -182,12 +195,16 @@ export default class Index extends Component {
     }
     let _id = e._id;
     const openId = Taro.getStorageSync('openid');
-    console.log(openId);
+    Taro.showLoading({ title: '加载中' });
+    await this.wait(1000);
+    Taro.hideLoading();
     Taro.request({
       url: 'https://weapp.hhp.im/orderContact',
+      method: 'POST',
       data: {
         _id: _id,
-        openId: openId
+        openId: openId,
+        formId: this.state.formId
       }
     }).then(res => {
       if (res.data === 'already') {
@@ -201,7 +218,7 @@ export default class Index extends Component {
             }
           }
         })
-      }else if(res.data === 'same'){
+      } else if (res.data === 'same') {
         Taro.showModal({
           title: '提示',
           content: '不能接自己的单哦！',
@@ -247,7 +264,9 @@ export default class Index extends Component {
                 {priTime.wechatNum}
               </View>
               <View className='button-con'>
-                <AtButton size='small' type='secondary' onClick={this.contactHandle.bind(this, priTime)}>联系替课</AtButton>
+                <AtForm onSubmit={this.changeFormId} reportSubmit className='form-self'>
+                  <AtButton size='small' type='secondary' onClick={this.contactHandle.bind(this, priTime)} formType='submit'>联系替课</AtButton>
+                </AtForm>
               </View>
             </View>
           </View>
