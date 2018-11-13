@@ -32,11 +32,11 @@
                 justify-content: flex-end;
                 align-items: center;
                 font-size: 28px;
-                .isshow-button{
+                .form-self {
                     padding-left: 10px;
-                    .form-self{
-                        padding: 0px;
-                    }
+                }
+                .button-self{
+                    padding-left: 10px;
                 }
             }
         }
@@ -44,8 +44,7 @@
 }
 
 .warnning-container {
-    color: #8a8a8a; 
-    // display: flex;
+    color: #8a8a8a; // display: flex;
     // justify-content: center;
     // align-items: center;
 }

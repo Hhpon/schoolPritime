@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Button, Form } from '@tarojs/components'
-import { AtButton, AtForm } from 'taro-ui'
+import { View, Form } from '@tarojs/components'
+import { AtButton } from 'taro-ui'
 
 import './order.scss'
 
@@ -10,7 +10,7 @@ export default class order extends Component {
   }
 
   constructor() {
-    super();
+    super()
     this.state = {
       isShowwarn: false,
       navigatorType: '',
@@ -20,8 +20,8 @@ export default class order extends Component {
   }
 
   componentDidShow() {
-    let navigatorType = this.$router.params.type;
-    this.getOrder(navigatorType);
+    let navigatorType = this.$router.params.type
+    this.getOrder(navigatorType)
   }
 
   getOrder(navigatorType) {
@@ -33,15 +33,15 @@ export default class order extends Component {
         navigatorType: navigatorType
       }
     }).then(res => {
-      console.log(res.data);
-      let length = res.data.length;
+      console.log(res.data)
+      let length = res.data.length
       if (!length) {
         this.setState({
           navigatorType: navigatorType,
           isShowwarn: true,
           priTimes: res.data
         })
-        return;
+        return
       }
       this.setState({
         navigatorType: navigatorType,
@@ -51,8 +51,8 @@ export default class order extends Component {
   }
 
   completeHandle(e) {
-    console.log(e);
-    let _id = e._id;
+    console.log(e)
+    let _id = e._id
     Taro.request({
       url: 'https://weapp.hhp.im/editOrder',
       data: {
@@ -60,8 +60,8 @@ export default class order extends Component {
         editType: 'complete'
       }
     })
-    let navigatorType = this.state.navigatorType;
-    this.getOrder(navigatorType);
+    let navigatorType = this.state.navigatorType
+    this.getOrder(navigatorType)
   }
 
   returnHandle(e) {
@@ -69,8 +69,8 @@ export default class order extends Component {
       title: '加载中',
     })
     setTimeout(() => {
-      let formId = this.state.formId;
-      let _id = e._id;
+      let formId = this.state.formId
+      let _id = e._id
       Taro.request({
         url: 'https://weapp.hhp.im/editOrder',
         data: {
@@ -79,10 +79,10 @@ export default class order extends Component {
           formId: formId
         }
       })
-      let navigatorType = this.state.navigatorType;
-      this.getOrder(navigatorType);
+      let navigatorType = this.state.navigatorType
+      this.getOrder(navigatorType)
       Taro.hideLoading()
-    }, 1000);
+    }, 1000)
   }
 
   changeFormId(e) {
@@ -92,8 +92,8 @@ export default class order extends Component {
   }
 
   delHandle(e) {
-    console.log(e);
-    let _id = e._id;
+    console.log(e)
+    let _id = e._id
     Taro.request({
       url: 'https://weapp.hhp.im/editOrder',
       data: {
@@ -101,13 +101,32 @@ export default class order extends Component {
         editType: 'del'
       }
     })
-    let navigatorType = this.state.navigatorType;
-    this.getOrder(navigatorType);
+    let navigatorType = this.state.navigatorType
+    this.getOrder(navigatorType)
+  }
+
+  onMakePhoneCall(e) {
+    Taro.makePhoneCall({
+      phoneNumber: e
+    })
+  }
+
+  onSetClipboardData(e) {
+    Taro.setClipboardData({
+      data: e,
+      success(res) {
+        Taro.showToast({
+          title: '复制成功！',
+          icon: 'success',
+          duration: 1000
+        })
+      }
+    })
   }
 
   render() {
-    let isShowwarn = this.state.isShowwarn;
-    let navigatorType = this.state.navigatorType;
+    let isShowwarn = this.state.isShowwarn
+    let navigatorType = this.state.navigatorType
     const TimeList = this.state.priTimes.map((priTime) => {
       return (
         <View className='priTime-container'>
@@ -166,16 +185,19 @@ export default class order extends Component {
                 }
                 {
                   navigatorType === 'onGoing' &&
-                  <View className='isshow-button'>
-                    <AtForm onSubmit={this.changeFormId} reportSubmit className='form-self'>
+                  <View className='button-con'>
+                    <Form className='form-self'>
+                      <AtButton size='small' type='secondary' onClick={this.onSetClipboardData.bind(this, priTime.contactWechatNum)}>复制微信</AtButton>
+                    </Form>
+                    <Form className='form-self'>
+                      <AtButton size='small' type='secondary' onClick={this.onMakePhoneCall.bind(this, priTime.contactTelNum)}>拨打电话</AtButton>
+                    </Form>
+                    <Form onSubmit={this.changeFormId} reportSubmit className='form-self'>
                       <AtButton size='small' type='secondary' onClick={this.returnHandle.bind(this, priTime)} formType='submit'>接单失败</AtButton>
-                    </AtForm>
-                  </View>
-                }
-                {
-                  navigatorType !== 'onCompleting' &&
-                  <View className='isshow-button'>
-                    <AtButton size='small' type='secondary' onClick={this.completeHandle.bind(this, priTime)}>完成</AtButton>
+                    </Form>
+                    <Form className='form-self'>
+                      <AtButton size='small' type='secondary' onClick={this.completeHandle.bind(this, priTime)}>完成</AtButton>
+                    </Form>
                   </View>
                 }
               </View>
@@ -189,8 +211,8 @@ export default class order extends Component {
         {
           isShowwarn &&
           <View className='warnning-container'>
-            <View style='height:20px'></View>
-            <View style='text-align:center'>您还没有这类订单~~~</View>
+            <View style='height:20px;'></View>
+            <View style='text-align:center;'>您还没有这类订单~~~</View>
           </View>
         }
         <View>

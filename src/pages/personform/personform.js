@@ -10,88 +10,107 @@ export default class personform extends Component {
     }
 
     constructor() {
-        super();
+        super()
         this.state = {
             personInfomation: {
                 name: '',
                 telNum: '',
                 sex: '男',
                 wechatNum: '',
-                note: '',
             }
         }
     }
 
+    componentDidShow() {
+        this.getPersonInfomation()
+    }
+
+    getPersonInfomation() {
+        const openId = Taro.getStorageSync('openid')
+        Taro.request({
+            url: 'https://weapp.hhp.im/getUserinfo',
+            data: {
+                openId: openId
+            }
+        }).then(res => {
+            let userInfo = res.data;
+            let personInfomation = this.state.personInfomation
+            personInfomation.name = userInfo.name
+            personInfomation.telNum = userInfo.telNum
+            personInfomation.sex = userInfo.sex
+            personInfomation.wechatNum = userInfo.wechatNum
+            this.setState({
+                personInfomation: personInfomation
+            })
+        })
+    }
+
     onSexChange = e => {
-        console.log(e);
-        let personInfomation = this.state.personInfomation;
-        personInfomation.sex = e;
+        console.log(e)
+        let personInfomation = this.state.personInfomation
+        personInfomation.sex = e
         this.setState({
             personInfomation: personInfomation
         })
     }
 
     onNameChange(e) {
-        let personInfomation = this.state.personInfomation;
-        personInfomation.name = e;
+        let personInfomation = this.state.personInfomation
+        personInfomation.name = e
         this.setState({
             personInfomation: personInfomation
         })
     }
 
     onTelChange(e) {
-        console.log(e);
-        let personInfomation = this.state.personInfomation;
-        personInfomation.telNum = e;
+        console.log(e)
+        let personInfomation = this.state.personInfomation
+        personInfomation.telNum = e
         this.setState({
             personInfomation: personInfomation
         })
     }
 
     onwechatNumChange(e) {
-        console.log(e);
-        let personInfomation = this.state.personInfomation;
-        personInfomation.wechatNum = e;
+        console.log(e)
+        let personInfomation = this.state.personInfomation
+        personInfomation.wechatNum = e
         this.setState({
             personInfomation: personInfomation
         })
     }
 
-    onNoteChange(e) {
-        console.log(e.detail.value);
-        let personInfomation = this.state.personInfomation;
-        personInfomation.note = e.detail.value;
-        this.setState({
-            personInfomation: personInfomation
-        })
-    }
+    // onNoteChange(e) {
+    //     console.log(e.detail.value)
+    //     let personInfomation = this.state.personInfomation
+    //     personInfomation.note = e.detail.value
+    //     this.setState({
+    //         personInfomation: personInfomation
+    //     })
+    // }
 
     submitHandle(e) {
-        console.log(e.detail);
-        let personInfomation = this.state.personInfomation;
-        const openId = Taro.getStorageSync('openid');
-
+        let personInfomation = this.state.personInfomation
+        const openId = Taro.getStorageSync('openid')
         for (let item in personInfomation) {
-            if (item !== 'note') {
-                let length = personInfomation[item].length;
-                if (!length) {
-                    wx.showModal({
-                        title: '提示',
-                        content: '请填写完整再提交',
-                        showCancel: false,
-                        success(res) {
-                            if (res.confirm) {
-                                console.log('用户点击确定')
-                            } else if (res.cancel) {
-                                console.log('用户点击取消')
-                            }
+            let length = personInfomation[item]
+            if (!length) {
+                console.log(typeof personInfomation[item]);
+                wx.showModal({
+                    title: '提示',
+                    content: '请填写完整再提交',
+                    showCancel: false,
+                    success(res) {
+                        if (res.confirm) {
+                            console.log('用户点击确定')
+                        } else if (res.cancel) {
+                            console.log('用户点击取消')
                         }
-                    })
-                    return;
-                }
+                    }
+                })
+                return
             }
         }
-
         Taro.request({
             url: 'https://weapp.hhp.im/addUserInfo',
             method: 'POST',
@@ -123,10 +142,10 @@ export default class personform extends Component {
                         Taro.navigateBack({
                             delta: 1
                         })
-                    }, 1000);
+                    }, 1000)
                 })
                 Taro.setStorage({ key: 'personalInfo', data: true }).then(res => {
-                    console.log('存储成功');
+                    console.log('存储成功')
                 })
             }
         })
@@ -168,13 +187,13 @@ export default class personform extends Component {
                         value={this.state.personInfomation.sex}
                         onClick={this.onSexChange}
                     />
-                    <AtTextarea
+                    {/* <AtTextarea
                         count={false}
                         value={this.state.personInfomatin.note}
                         onChange={this.onNoteChange.bind(this)}
                         maxlength='100'
                         placeholder='备注信息(选填)'
-                    />
+                    /> */}
                     <Button form-type='submit' className='button-self'>提交</Button>
                 </Form>
             </View>

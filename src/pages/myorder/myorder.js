@@ -10,7 +10,7 @@ export default class myorder extends Component {
   }
 
   constructor() {
-    super();
+    super()
     this.state = {
       myOrder: [],
       isShowwarn: false
@@ -18,7 +18,7 @@ export default class myorder extends Component {
   }
 
   componentDidShow() {
-    this.getMyOrder();
+    this.getMyOrder()
   }
 
   getMyOrder() {
@@ -29,7 +29,7 @@ export default class myorder extends Component {
         openId: openId,
       }
     }).then(res => {
-      console.log(res.data);
+      console.log(res.data)
       if (res.data === 'err') {
         Taro.showModal({
           title: '提示',
@@ -41,15 +41,15 @@ export default class myorder extends Component {
             }
           }
         })
-        return;
+        return
       }
-      let length = res.data.length;
+      let length = res.data.length
       if (!length) {
         this.setState({
           isShowwarn: true,
           myOrder: res.data
         })
-        return;
+        return
       }
       this.setState({
         myOrder: res.data.reverse()
@@ -57,8 +57,27 @@ export default class myorder extends Component {
     })
   }
 
+  onMakePhoneCall(e) {
+    Taro.makePhoneCall({
+      phoneNumber: e
+    })
+  }
+
+  onSetClipboardData(e) {
+    Taro.setClipboardData({
+      data: e,
+      success(res) {
+        Taro.showToast({
+          title: '复制成功！',
+          icon: 'success',
+          duration: 1000
+        })
+      }
+    })
+  }
+
   render() {
-    let isShowwarn = this.state.isShowwarn;
+    let isShowwarn = this.state.isShowwarn
     const TimeList = this.state.myOrder.map((priTime) => {
       return (
         <View className='priTime-container'>
@@ -121,6 +140,16 @@ export default class myorder extends Component {
                 <Text style='font-weight: bold;'>寻找人电话：</Text>
                 {priTime.contactTelNum}
               </View>
+              <View className='button-con'>
+                <View className='button-con'>
+                  <Form className='form-self'>
+                    <AtButton size='small' type='secondary' onClick={this.onSetClipboardData.bind(this, priTime.wechatNum)}>复制微信</AtButton>
+                  </Form>
+                  <Form className='form-self'>
+                    <AtButton size='small' type='secondary' onClick={this.onMakePhoneCall.bind(this, priTime.telNum)}>拨打电话</AtButton>
+                  </Form>
+                </View>
+              </View>
             </View>
           </View>
         </View>
@@ -131,8 +160,8 @@ export default class myorder extends Component {
         {
           isShowwarn &&
           <View className='warnning-container'>
-            <View style='height:20px'></View>
-            <View style='text-align:center'>您还没有这类订单~~~</View>
+            <View style='height:20px;'></View>
+            <View style='text-align:center;'>您还没有这类订单~~~</View>
           </View>
         }
         <View>

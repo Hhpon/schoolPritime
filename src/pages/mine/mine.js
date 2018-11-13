@@ -11,19 +11,19 @@ export default class mine extends Component {
     }
 
     constructor() {
-        super();
+        super()
         this.state = {
             userInfo: {}
         }
     }
 
     componentDidShow() {
-        this.getUserinfo();
+        this.getUserinfo()
     }
 
     getUserinfo() {
-        const openId = Taro.getStorageSync('openid');
-        console.log(openId);
+        const openId = Taro.getStorageSync('openid')
+        console.log(openId)
         Taro.request({
             // https://weapp.hhp.im
             url: 'https://weapp.hhp.im/getUserinfo',
@@ -34,7 +34,13 @@ export default class mine extends Component {
             this.setState({
                 userInfo: res.data
             })
-            console.log(res);
+            console.log(res)
+        })
+    }
+
+    onChangePersonalInfomation() {
+        Taro.navigateTo({
+            url:'/pages/personform/personform'
         })
     }
 
@@ -43,23 +49,23 @@ export default class mine extends Component {
             url: '/pages/order/order?type=onStarting'
         })
     }
-    
-    onGoing(){
+
+    onGoing() {
         Taro.navigateTo({
             url: '/pages/order/order?type=onGoing'
         })
     }
 
-    onCompleting(){
+    onCompleting() {
         Taro.navigateTo({
             url: '/pages/order/order?type=onCompleting'
         })
     }
 
-    onMyorder(){
+    onMyorder() {
         Taro.navigateTo({
             url: '/pages/myorder/myorder'
-        }) 
+        })
     }
 
     render() {
@@ -69,7 +75,7 @@ export default class mine extends Component {
                     <View className='image-container'>
                         <View style='height:10px;'></View>
                         <View className='avatar-con'>
-                            <View className='avatar'>
+                            <View className='avatar' onClick={this.onChangePersonalInfomation}>
                                 <Image src={this.state.userInfo.avatarUrl} style='width:70px;height:70px;'></Image>
                             </View>
                         </View>

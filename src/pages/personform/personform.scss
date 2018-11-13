@@ -1,9 +1,13 @@
 .form-container {
     padding: 0 20px;
+    height: 100vh;
     .button-self {
         background-color: #6190E8;
         color: #FFF;
-        margin: 20px auto;
-        width: 50%;
+        width: 50vw;
+        position: fixed;
+        bottom: 100px;
+        left: 50%;
+        margin-left: -25vw;
     }
 }

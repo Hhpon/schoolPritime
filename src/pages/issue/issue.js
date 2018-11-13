@@ -10,9 +10,10 @@ export default class issue extends Component {
     }
 
     constructor() {
-        super();
+        super()
         this.state = {
             dateSel: '',
+            nowDate: '',
             timeRadio: [
                 {
                     value: '第一节',
@@ -52,30 +53,30 @@ export default class issue extends Component {
     }
 
     componentDidShow() {
-        this.onChangetime();
-        this.getUserRecord();
+        this.onChangetime()
+        this.getUserRecord()
     }
 
     getUserRecord() {
-        const openId = Taro.getStorageSync('openid');
+        const openId = Taro.getStorageSync('openid')
         Taro.request({
             url: 'https://weapp.hhp.im/getUserRecord',
             data: {
                 openId: openId
             }
         }).then(res => {
-            let result = res.data;
+            let result = res.data
             if (result === '无用户记录') {
-                console.log(result);
-                return;
+                console.log(result)
+                return
             }
-            let personInfomation = this.state.personInfomation;
-            personInfomation.name = result.name;
-            personInfomation.telNum = result.telNum;
-            personInfomation.wechatNum = result.wechatNum;
-            personInfomation.sex = result.sex;
-            personInfomation.price = result.price;
-            personInfomation.timeRadio = '';
+            let personInfomation = this.state.personInfomation
+            personInfomation.name = result.name
+            personInfomation.telNum = result.telNum
+            personInfomation.wechatNum = result.wechatNum
+            personInfomation.sex = result.sex
+            personInfomation.price = result.price
+            personInfomation.timeRadio = ''
             this.setState({
                 personInfomation: personInfomation
             })
@@ -83,36 +84,38 @@ export default class issue extends Component {
     }
 
     onChangetime() {
-        let year = new Date().getFullYear();
-        let month = new Date().getMonth() + 1;
-        let day = new Date().getDate();
-        let personInfomation = this.state.personInfomation;
-        personInfomation.partimeDate = year + '-' + month + '-' + day;
+        let year = new Date().getFullYear()
+        let month = new Date().getMonth() + 1
+        let day = new Date().getDate()
+        let personInfomation = this.state.personInfomation
+        let nowDate = year + '-' + month + '-' + day
+        personInfomation.partimeDate = nowDate
         this.setState({
-            personInfomation: personInfomation
+            personInfomation: personInfomation,
+            nowDate: nowDate
         })
     }
 
     onDateChange = e => {
-        let personInfomation = this.state.personInfomation;
-        personInfomation.partimeDate = e.detail.value;
+        let personInfomation = this.state.personInfomation
+        personInfomation.partimeDate = e.detail.value
         this.setState({
             personInfomation: personInfomation
         })
     }
 
     onSexChange = e => {
-        let personInfomation = this.state.personInfomation;
-        personInfomation.sex = e;
+        let personInfomation = this.state.personInfomation
+        personInfomation.sex = e
         this.setState({
             personInfomation: personInfomation
         })
     }
 
     onTimeChange = e => {
-        console.log(e);
-        let personInfomation = this.state.personInfomation;
-        personInfomation.timeRadio = e;
+        console.log(e)
+        let personInfomation = this.state.personInfomation
+        personInfomation.timeRadio = e
         this.setState({
             personInfomation: personInfomation
         })
@@ -120,40 +123,40 @@ export default class issue extends Component {
 
 
     onNameChange(e) {
-        let personInfomation = this.state.personInfomation;
-        personInfomation.name = e;
+        let personInfomation = this.state.personInfomation
+        personInfomation.name = e
         this.setState({
             personInfomation: personInfomation
         })
     }
 
     onPriceChange(e) {
-        let personInfomation = this.state.personInfomation;
-        personInfomation.price = e;
+        let personInfomation = this.state.personInfomation
+        personInfomation.price = e
         this.setState({
             personInfomation: personInfomation
         })
     }
 
     onTelChange(e) {
-        let personInfomation = this.state.personInfomation;
-        personInfomation.telNum = e;
+        let personInfomation = this.state.personInfomation
+        personInfomation.telNum = e
         this.setState({
             personInfomation: personInfomation
         })
     }
 
     onwechatNumChange(e) {
-        let personInfomation = this.state.personInfomation;
-        personInfomation.wechatNum = e;
+        let personInfomation = this.state.personInfomation
+        personInfomation.wechatNum = e
         this.setState({
             personInfomation: personInfomation
         })
     }
 
     onNoteChange(e) {
-        let personInfomation = this.state.personInfomation;
-        personInfomation.note = e.detail.value;
+        let personInfomation = this.state.personInfomation
+        personInfomation.note = e.detail.value
         this.setState({
             personInfomation: personInfomation
         })
@@ -161,14 +164,14 @@ export default class issue extends Component {
 
     // 点击提交按钮后上传表单内容
     submitHandle(e) {
-        console.log(e.detail.formId);
-        let personInfomation = this.state.personInfomation;
-        let formId = e.detail.formId;
-        const openId = Taro.getStorageSync('openid');
+        console.log(e.detail.formId)
+        let personInfomation = this.state.personInfomation
+        let formId = e.detail.formId
+        const openId = Taro.getStorageSync('openid')
 
         for (let item in personInfomation) {
             if (item !== 'note') {
-                let length = personInfomation[item].length;
+                let length = personInfomation[item].length
                 if (!length) {
                     Taro.showModal({
                         title: '提示',
@@ -182,7 +185,7 @@ export default class issue extends Component {
                             }
                         }
                     })
-                    return;
+                    return
                 }
             }
         }
@@ -219,7 +222,7 @@ export default class issue extends Component {
                         Taro.switchTab({
                             url: '/pages/index/index'
                         })
-                    }, 1000);
+                    }, 1000)
                 })
             }
         })
@@ -264,7 +267,7 @@ export default class issue extends Component {
                         value={this.state.personInfomation.wechatNum}
                         onChange={this.onwechatNumChange.bind(this)}
                     />
-                    <Picker mode='date' start={this.state.personInfomation.partimeDate} onChange={this.onDateChange}>
+                    <Picker mode='date' start={this.state.nowDate} onChange={this.onDateChange}>
                         <View className='picker-container'>
                             <View className='picker-title'>兼职日期</View>
                             <View>{this.state.personInfomation.partimeDate}</View>

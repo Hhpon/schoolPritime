@@ -1,8 +1,7 @@
 import Taro, { Component } from '@tarojs/taro'
-import { View, Text, Button, Picker, Image } from '@tarojs/components'
-import { AtTabBar, AtIcon, AtButton, AtForm } from "taro-ui"
+import { View, Text, Button, Picker, Image, Form } from '@tarojs/components'
+import { AtTabBar, AtIcon, AtButton } from "taro-ui"
 import './index.scss'
-import { rejects } from 'assert';
 
 export default class Index extends Component {
 
@@ -11,7 +10,7 @@ export default class Index extends Component {
   }
 
   constructor() {
-    super();
+    super()
     this.state = {
       isScopeOpen: false,
       current: 0,
@@ -20,7 +19,8 @@ export default class Index extends Component {
       showDate: '',
       isShowForm: false,
       isShow: false,
-      formId: ''
+      formId: '',
+      nowDate: ''
     }
   }
 
@@ -32,38 +32,39 @@ export default class Index extends Component {
   componentWillUnmount() { }
 
   componentDidShow() {
-    this.getUserSetting();
-    let todayDate = this.onInitializetime();
-    let current = this.state.current;
-    this.getPritime(current, todayDate);
+    this.getUserSetting()
+    let todayDate = this.onInitializetime()
+    let current = this.state.current
+    this.getPritime(current, todayDate)
   }
 
   componentDidHide() { }
 
   onInitializetime() {
-    let year = new Date().getFullYear();
-    let month = new Date().getMonth() + 1;
-    let day = new Date().getDate();
-    let todayDate = year + '-' + month + '-' + day;
-    let showDate = month + '-' + day;
+    let year = new Date().getFullYear()
+    let month = new Date().getMonth() + 1
+    let day = new Date().getDate()
+    let todayDate = year + '-' + month + '-' + day
+    let showDate = month + '-' + day
     this.setState({
+      nowDate: todayDate,
       todayDate: todayDate,
       showDate: showDate
     })
-    return todayDate;
+    return todayDate
   }
 
   getUserSetting() {
-    const that = this;
+    const that = this
     Taro.getSetting({
       success(res) {
         if (!res.authSetting['scope.userInfo']) {
-          console.log('用户未授权');
+          console.log('用户未授权')
           that.setState({
             isScopeOpen: true
           })
         } else {
-          console.log('用户已授权');
+          console.log('用户已授权')
           Taro.getUserInfo({
             success(res) {
               let userInfo = JSON.parse(res.rawData)
@@ -79,7 +80,7 @@ export default class Index extends Component {
                     userInfo: userInfo
                   }
                 }).then(res => {
-                  console.log(res);
+                  console.log(res)
                 })
               }
             }
@@ -90,16 +91,16 @@ export default class Index extends Component {
   }
 
   getUserinfomation(e) {
-    const userInfo = e.detail.userInfo;
-    console.log(userInfo);
-    const that = this;
+    const userInfo = e.detail.userInfo
+    console.log(userInfo)
+    const that = this
     if (e.detail.errMsg === 'getUserInfo:ok') {
       this.setState({
         isScopeOpen: false
       })
       Taro.login({
         success(res) {
-          console.log(res);
+          console.log(res)
           Taro.request({
             url: 'https://weapp.hhp.im/onLogin',
             method: 'POST',
@@ -108,12 +109,12 @@ export default class Index extends Component {
               userInfo: userInfo
             }
           }).then(res => {
-            console.log(res.data);
+            console.log(res.data)
             that.setState({
               openId: res.data
             })
             Taro.setStorage({ key: 'openid', data: res.data }).then(res => {
-              console.log('存储成功');
+              console.log('存储成功')
             })
           })
         }
@@ -127,13 +128,13 @@ export default class Index extends Component {
       method: 'POST',
       data: { current: current, todayDate: todayDate }
     }).then(res => {
-      let result = res.data.length;
+      let result = res.data.length
       if (!result) {
         this.setState({
           priTimes: res.data,
           isShow: true
         })
-        return;
+        return
       }
       this.setState({
         isShow: false,
@@ -146,17 +147,18 @@ export default class Index extends Component {
     this.setState({
       current: e
     })
-    let todayDate = this.state.todayDate;
-    this.getPritime(e, todayDate);
+    let todayDate = this.state.todayDate
+    this.getPritime(e, todayDate)
   }
 
   onDateChange = e => {
-    let showDate = e.detail.value.slice(5);
+    let showDate = e.detail.value.slice(5)
     this.setState({
       todayDate: e.detail.value,
       showDate: showDate
     })
-    this.getPritime(0, e.detail.value);
+    let current = this.state.current;
+    this.getPritime(current, e.detail.value)
   }
 
   changeFormId(e) {
@@ -169,13 +171,13 @@ export default class Index extends Component {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve('ok')
-      }, timeout);
+      }, timeout)
     })
   }
 
   async contactHandle(e) {
-    console.log(e);
-    const personalInfo = Taro.getStorageSync('personalInfo');
+    console.log(e)
+    const personalInfo = Taro.getStorageSync('personalInfo')
     if (!personalInfo) {
       wx.showModal({
         title: '提示',
@@ -191,13 +193,13 @@ export default class Index extends Component {
           }
         }
       })
-      return;
+      return
     }
-    let _id = e._id;
-    const openId = Taro.getStorageSync('openid');
-    Taro.showLoading({ title: '加载中' });
-    await this.wait(1000);
-    Taro.hideLoading();
+    let _id = e._id
+    const openId = Taro.getStorageSync('openid')
+    Taro.showLoading({ title: '加载中' })
+    await this.wait(1000)
+    Taro.hideLoading()
     Taro.request({
       url: 'https://weapp.hhp.im/orderContact',
       method: 'POST',
@@ -230,9 +232,22 @@ export default class Index extends Component {
           }
         })
       }
-      let todayDate = this.state.todayDate;
-      let current = this.state.current;
-      this.getPritime(current, todayDate);
+      Taro.showModal({
+        title: '成功',
+        content: '您的信息已通过模板消息发送至对方手机，请问是否立即查看对方信息？',
+        success(res) {
+          if (res.confirm) {
+            Taro.navigateTo({
+              url: '/pages/myorder/myorder'
+            })
+          } else if (res.cancel) {
+            console.log('用户点击取消')
+          }
+        }
+      })
+      let todayDate = this.state.todayDate
+      let current = this.state.current
+      this.getPritime(current, todayDate)
     })
   }
 
@@ -264,9 +279,9 @@ export default class Index extends Component {
                 {priTime.wechatNum}
               </View>
               <View className='button-con'>
-                <AtForm onSubmit={this.changeFormId} reportSubmit className='form-self'>
+                <Form onSubmit={this.changeFormId} reportSubmit className='form-self'>
                   <AtButton size='small' type='secondary' onClick={this.contactHandle.bind(this, priTime)} formType='submit'>联系替课</AtButton>
-                </AtForm>
+                </Form>
               </View>
             </View>
           </View>
@@ -278,9 +293,9 @@ export default class Index extends Component {
         {
           isScopeOpen &&
           <View className='model-container'>
-            <View style='height:30%'></View>
+            <View style='height:30%;'></View>
             <View className='dialog-container'>
-              <View style='height:10px'></View>
+              <View style='height:10px;'></View>
               <View className='dialog-header'>提示</View>
               <View className='dialog-content'>请允许用户授权</View>
               <View className='dialog-handle'>
@@ -308,12 +323,12 @@ export default class Index extends Component {
         {
           isShow &&
           <View className='warnning-container'>
-            <View style='height:20px'></View>
-            <View style='text-align:center'>今天还没人发布替课信息~~~</View>
+            <View style='height:20px;'></View>
+            <View style='text-align:center;'>今天还没人发布替课信息~~~</View>
           </View>
         }
 
-        <Picker mode='date' start={this.state.todayDate} onChange={this.onDateChange}>
+        <Picker mode='date' start={this.state.nowDate} onChange={this.onDateChange}>
           <View className='picker-container'>
             {this.state.showDate}
           </View>
