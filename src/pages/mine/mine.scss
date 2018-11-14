@@ -1,74 +1,91 @@
-.message-container {
-    height: 470px;
-    position: relative;
-    .image-container {
-        height: 350px;
-        background: #6190E8;
-        .avatar-con {
-            width: 155px;
-            height: 155px;
-            border-radius: 50%;
-            margin: 0 auto;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba($color: #fff, $alpha: 0.3);
-            .avatar {
+.container{
+    // display: flex;
+    // flex-direction: column;
+    .message-container {
+        height: 470px;
+        position: relative;
+        .image-container {
+            height: 350px;
+            background: #6190E8;
+            .avatar-con {
+                width: 155px;
+                height: 155px;
                 border-radius: 50%;
+                margin: 0 auto;
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                overflow: hidden;
+                background-color: rgba($color: #fff, $alpha: 0.3);
+                .avatar {
+                    border-radius: 50%;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    overflow: hidden;
+                }
+            }
+            .name-con {
+                color: #FFF;
+                font-size: 26px;
+                text-align: center;
+                padding-top: 10px;
             }
         }
-        .name-con {
-            color: #FFF;
-            font-size: 26px;
-            text-align: center;
-            padding-top: 10px;
-        }
-    }
-    .mine-order {
-        height: 240px;
-        width: 90%;
-        background-color: #FFF;
-        border-radius: 10px;
-        box-shadow: 8px 2px 20px 2px rgb(223, 238, 225);
-        position: absolute;
-        bottom: 0px;
-        left: 50%;
-        margin-left: -45%;
-        .order-top {
-            height: 40%;
-            padding: 0 20px;
-            border-bottom: 1px solid #E3E3E3;
-            font-size: 28px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            .ordertop-right {
-                height: 100%;
-                color: #868281;
-                font-size: 24px;
+        .mine-order {
+            height: 240px;
+            width: 90%;
+            background-color: #FFF;
+            border-radius: 10px;
+            box-shadow: 8px 2px 20px 2px rgb(223, 238, 225);
+            position: absolute;
+            bottom: 0px;
+            left: 50%;
+            margin-left: -45%;
+            .order-top {
+                height: 40%;
+                padding: 0 20px;
+                border-bottom: 1px solid #E3E3E3;
+                font-size: 28px;
                 display: flex;
-                align-items: center;
-            }
-        }
-        .order-bottom {
-            height: 60%;
-            font-size: 24px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            .order-icon {
-                height: 100%;
-                box-sizing: border-box;
-                padding: 25px 0px;
-                display: flex;
-                flex-direction: column;
                 align-items: center;
                 justify-content: space-between;
+                .ordertop-right {
+                    height: 100%;
+                    color: #868281;
+                    font-size: 24px;
+                    display: flex;
+                    align-items: center;
+                }
             }
+            .order-bottom {
+                height: 60%;
+                font-size: 24px;
+                display: flex;
+                justify-content: space-around;
+                align-items: center;
+                .order-icon {
+                    height: 100%;
+                    box-sizing: border-box;
+                    padding: 25px 0px;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+            }
+        }
+    }
+    .cell-container{
+        width: 85%;
+        padding: 20px 0;
+        margin: 0 auto;
+        font-size: 26px;
+        .cell-self{
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 30px 0;
+            border-bottom: 1px solid #E3E3E3;
         }
     }
 }

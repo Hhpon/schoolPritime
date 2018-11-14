@@ -40,7 +40,7 @@ export default class mine extends Component {
 
     onChangePersonalInfomation() {
         Taro.navigateTo({
-            url:'/pages/personform/personform'
+            url: '/pages/personform/personform'
         })
     }
 
@@ -68,9 +68,15 @@ export default class mine extends Component {
         })
     }
 
+    onInstructions(){
+        Taro.navigateTo({
+            url: '/pages/instructions/instructions'
+        })
+    }
+
     render() {
         return (
-            <View>
+            <View className='container'>
                 <View className='message-container'>
                     <View className='image-container'>
                         <View style='height:10px;'></View>
@@ -104,7 +110,14 @@ export default class mine extends Component {
                         </View>
                     </View>
                 </View>
-                <View></View>
+                <View className='cell-container'>
+                    <View className='cell-self' onClick={this.onInstructions}>
+                        <Text>使用方法</Text>
+                        <View>
+                            <AtIcon value='chevron-right' size='15' color='#868281'></AtIcon>
+                        </View>
+                    </View>
+                </View>
                 <View></View>
             </View>
         )

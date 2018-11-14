@@ -1,6 +1,6 @@
 import Taro, { Component } from '@tarojs/taro'
 import { View } from '@tarojs/components'
-import { AtButton, AtInput, AtRadio, AtTextarea } from 'taro-ui'
+import { AtInput, AtRadio, AtNoticebar } from 'taro-ui'
 
 import './personform.scss'
 
@@ -17,6 +17,7 @@ export default class personform extends Component {
                 telNum: '',
                 sex: '男',
                 wechatNum: '',
+                student_id: ''
             }
         }
     }
@@ -62,6 +63,14 @@ export default class personform extends Component {
         })
     }
 
+    onstudent_idChange(e) {
+        let personInfomation = this.state.personInfomation
+        personInfomation.student_id = e
+        this.setState({
+            personInfomation: personInfomation
+        })
+    }
+
     onTelChange(e) {
         console.log(e)
         let personInfomation = this.state.personInfomation
@@ -80,73 +89,71 @@ export default class personform extends Component {
         })
     }
 
-    // onNoteChange(e) {
-    //     console.log(e.detail.value)
-    //     let personInfomation = this.state.personInfomation
-    //     personInfomation.note = e.detail.value
-    //     this.setState({
-    //         personInfomation: personInfomation
-    //     })
-    // }
-
     submitHandle(e) {
         let personInfomation = this.state.personInfomation
         const openId = Taro.getStorageSync('openid')
-        for (let item in personInfomation) {
-            let length = personInfomation[item]
-            if (!length) {
-                console.log(typeof personInfomation[item]);
-                wx.showModal({
-                    title: '提示',
-                    content: '请填写完整再提交',
-                    showCancel: false,
-                    success(res) {
-                        if (res.confirm) {
-                            console.log('用户点击确定')
-                        } else if (res.cancel) {
-                            console.log('用户点击取消')
+        Taro.showModal({
+            title: '提示',
+            content: '此内容提交以后无法修改，是否确认提交？',
+            success(res) {
+                if (res.confirm) {
+                    for (let item in personInfomation) {
+                        let length = personInfomation[item]
+                        if (!length) {
+                            Taro.showModal({
+                                title: '提示',
+                                content: '请填写完整再提交',
+                                showCancel: false,
+                                success(res) {
+                                    if (res.confirm) {
+                                        console.log('用户点击确定')
+                                    } else if (res.cancel) {
+                                        console.log('用户点击取消')
+                                    }
+                                }
+                            })
+                            return
                         }
                     }
-                })
-                return
-            }
-        }
-        Taro.request({
-            url: 'https://weapp.hhp.im/addUserInfo',
-            method: 'POST',
-            data: {
-                personInfomation: this.state.personInfomation,
-                openId: openId
-            }
-        }).then(res => {
-            if (res.data === 'no') {
-                wx.showModal({
-                    title: '提示',
-                    content: '请填写完整再提交',
-                    showCancel: false,
-                    success(res) {
-                        if (res.confirm) {
-                            console.log('用户点击确定')
-                        } else if (res.cancel) {
-                            console.log('用户点击取消')
+                    Taro.request({
+                        url: 'https://weapp.hhp.im/addUserInfo',
+                        method: 'POST',
+                        data: {
+                            personInfomation: personInfomation,
+                            openId: openId
                         }
-                    }
-                })
-            } else {
-                Taro.showToast({
-                    title: '绑定成功！',
-                    icon: 'success',
-                    duration: 2000
-                }).then(res => {
-                    setTimeout(() => {
-                        Taro.navigateBack({
-                            delta: 1
-                        })
-                    }, 1000)
-                })
-                Taro.setStorage({ key: 'personalInfo', data: true }).then(res => {
-                    console.log('存储成功')
-                })
+                    }).then(res => {
+                        if (res.data === 'no') {
+                            Taro.showModal({
+                                title: '提示',
+                                content: '请填写完整再提交',
+                                showCancel: false,
+                                success(res) {
+                                    if (res.confirm) {
+                                        console.log('用户点击确定')
+                                    } else if (res.cancel) {
+                                        console.log('用户点击取消')
+                                    }
+                                }
+                            })
+                        } else {
+                            Taro.showToast({
+                                title: '绑定成功！',
+                                icon: 'success',
+                                duration: 2000
+                            }).then(res => {
+                                setTimeout(() => {
+                                    Taro.navigateBack({
+                                        delta: 1
+                                    })
+                                }, 1000)
+                            })
+                            Taro.setStorage({ key: 'personalInfo', data: true }).then(res => {
+                                console.log('存储成功')
+                            })
+                        }
+                    })
+                }
             }
         })
     }
@@ -154,6 +161,9 @@ export default class personform extends Component {
     render() {
         return (
             <View className='form-container'>
+                <AtNoticebar icon='volume-plus'>
+                    此内容填写之后无法修改，请认真填写。
+                </AtNoticebar>
                 <Form onSubmit={this.submitHandle} reportSubmit>
                     <AtInput
                         name='value1'
@@ -162,6 +172,14 @@ export default class personform extends Component {
                         placeholder='必填项'
                         value={this.state.personInfomation.name}
                         onChange={this.onNameChange.bind(this)}
+                    />
+                    <AtInput
+                        name='value1'
+                        title='学号'
+                        type='text'
+                        placeholder='必填项'
+                        value={this.state.personInfomation.student_id}
+                        onChange={this.onstudent_idChange.bind(this)}
                     />
                     <AtInput
                         name='value1'
@@ -187,13 +205,6 @@ export default class personform extends Component {
                         value={this.state.personInfomation.sex}
                         onClick={this.onSexChange}
                     />
-                    {/* <AtTextarea
-                        count={false}
-                        value={this.state.personInfomatin.note}
-                        onChange={this.onNoteChange.bind(this)}
-                        maxlength='100'
-                        placeholder='备注信息(选填)'
-                    /> */}
                     <Button form-type='submit' className='button-self'>提交</Button>
                 </Form>
             </View>

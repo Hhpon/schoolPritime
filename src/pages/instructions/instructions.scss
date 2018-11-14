@@ -1,0 +1,19 @@
+.container {
+    width: 90%;
+    margin: 0 auto;
+    .title-self {
+        text-align: center;
+        font-size: 38px;
+        padding: 20px 0;
+        border-bottom: 1px solid #ccc;
+    }
+    .annotation {
+        padding-top: 20px;
+        font-size: 26px;
+        color: #ccc;
+    }
+    .article {
+        padding: 20px 0;
+        font-size: 28px;
+    }
+}

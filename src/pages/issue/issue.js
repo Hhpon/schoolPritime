@@ -53,8 +53,28 @@ export default class issue extends Component {
     }
 
     componentDidShow() {
+        this.getPersonalInfo()
         this.onChangetime()
         this.getUserRecord()
+    }
+
+    getPersonalInfo(){
+        const personalInfo = Taro.getStorageSync('personalInfo')
+        if (!personalInfo) {
+          Taro.showModal({
+            title: '提示',
+            content: '您还没绑定个人信息，请先绑定！',
+            showCancel: false,
+            success(res) {
+              if (res.confirm) {
+                Taro.navigateTo({
+                  url: '/pages/personform/personform'
+                })
+              }
+            }
+          })
+          return
+        }
     }
 
     getUserRecord() {
