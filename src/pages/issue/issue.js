@@ -58,22 +58,25 @@ export default class issue extends Component {
         this.getUserRecord()
     }
 
-    getPersonalInfo(){
+    getPersonalInfo() {
         const personalInfo = Taro.getStorageSync('personalInfo')
         if (!personalInfo) {
-          Taro.showModal({
-            title: '提示',
-            content: '您还没绑定个人信息，请先绑定！',
-            showCancel: false,
-            success(res) {
-              if (res.confirm) {
-                Taro.navigateTo({
-                  url: '/pages/personform/personform'
-                })
-              }
-            }
-          })
-          return
+            Taro.showModal({
+                title: '提示',
+                content: '您还没绑定个人信息，请先绑定！',
+                success(res) {
+                    if (res.confirm) {
+                        Taro.navigateTo({
+                            url: '/pages/personform/personform'
+                        })
+                    } else if (res.cancel) {
+                        Taro.switchTab({
+                            url: '/pages/index/index'
+                        })
+                    }
+                }
+            })
+            return
         }
     }
 
@@ -251,8 +254,8 @@ export default class issue extends Component {
     render() {
         return (
             <View className='container'>
-                <AtNoticebar icon='volume-plus'>
-                    请认真填写，兼职时间提交之后不能修改！
+                <AtNoticebar icon='volume-plus' marquee>
+                    填写即代表您同意在您所选择的时间里帮别人上课！
                 </AtNoticebar>
                 <Form onSubmit={this.submitHandle} reportSubmit className='form-container'>
                     <AtInput
